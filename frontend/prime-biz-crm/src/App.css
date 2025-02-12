@@ -1,42 +1,202 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+/* Navbar style */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.navbar-logo {
+  font-size: 20px;
+  font-weight: bold;
+  color: black;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+.navbar-links {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.navbar-links a {
+  text-decoration: none;
+  padding: 12px 25px;
+  border-radius: 12px;
+  font-size: 16px;
+  transition: 0.3s ease, color 0.3s ease;
+  font-weight: bold;
+}
+
+.primary-link {
+  background-color: blue;
+  color: white;
+  border: none;
+}
+
+.secondary-link {
+  background-color: white;
+  color: black;
+  border: 2px solid black;
+}
+
+.navbar-links a:hover {
+  opacity: 0.8;
+  transform: scale(1.05);
+}
+
+/* Main page style */
+.clickable {
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+.clickable:hover {
+  background-color: #f0f4f8;
+}
+
+.clickable:active {
+  transform: scale(0.98);
+}
+
+.dashboard {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding-top: 6rem;
+  background-color: #ebf8ff;
+}
+
+.greeting {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: 10fr 3fr;
   }
-  to {
-    transform: rotate(360deg);
-  }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.sales-performance {
+  border-radius: 1rem;
+  padding: 1.5rem;
 }
 
-.card {
-  padding: 2em;
+.sales-performance h2 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
 }
 
-.read-the-docs {
-  color: #888;
+.chart-placeholder {
+  background-color: #ffffff;
+  border-radius: 1rem;
+  height: 18rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.chart-placeholder p {
+  color: #a0aec0;
+}
+
+.top-leads {
+  border-radius: 1rem;
+  padding: 1.5rem;
+}
+
+.top-leads h2 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.top-leads ul {
+  padding-left: 0;
+  list-style: none;
+}
+
+.top-leads li {
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  width: 24rem;
+}
+
+.top-leads li:not(:last-child) {
+  margin-bottom: 0.5rem;
+}
+
+.lead-name {
+  font-weight: bold;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.lead-email {
+  font-size: 0.875rem;
+  color: #a0aec0;
+  margin: 0;
+}
+
+.reminders {
+  border-radius: 1rem;
+  padding: 1.5rem;
+}
+
+.reminders h2 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.reminders ul {
+  padding-left: 0;
+  list-style: none;
+}
+
+.reminders li {
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.reminders li:not(:last-child) {
+  margin-bottom: 0.5rem;
+}
+
+.reminder-title {
+  font-weight: bold;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.reminder-date {
+  font-size: 0.875rem;
+  color: #a0aec0;
+  margin: 0;
 }
