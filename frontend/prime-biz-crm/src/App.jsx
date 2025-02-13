@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import MainPage from './components/screens/MainPage'
 import AddLeadPage from './components/screens/AddLeadPage';
-import Screen3 from './components/Screen3';
+import AllLeadsPage from './components/screens/AllLeadsPage'
 import './App.css';
 
 function App() {
@@ -14,7 +14,7 @@ function App() {
         <Routes>
           <Route path="/" element={<MainPage />} />
           <Route path="/add_lead" element={<AddLeadPage />} />
-          <Route path="/screen3" element={<Screen3 />} />
+          <Route path="/all_leads" element={<AllLeadsPage />} />
         </Routes>
       </div>
     </Router>
