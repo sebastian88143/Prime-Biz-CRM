@@ -6,7 +6,7 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="navbar-logo">LOGOPRIMEBIZ CRM</div>
       <div className="navbar-links">
-        <Link to="/add-new-lead" className="primary-link">Add New Lead</Link>
+        <Link to="/add_lead" className="primary-link">Add New Lead</Link>
         <Link to="/pipeline" className="primary-link">Pipeline</Link>
         <Link to="/all-leads" className="secondary-link">All Leads</Link>
         <Link to="/analytics" className="secondary-link">Analytics</Link>
