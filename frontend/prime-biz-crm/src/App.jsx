@@ -5,6 +5,7 @@ import MainPage from './components/screens/MainPage'
 import AddLeadPage from './components/screens/AddLeadPage';
 import PipeLinePage from './components/screens/PipelinePage';
 import AllLeadsPage from './components/screens/AllLeadsPage'
+import RemindersPage from './components/screens/RemindersPage';
 import './App.css';
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
           <Route path="/add_lead" element={<AddLeadPage />} />
           <Route path="/pipeline" element={<PipeLinePage />}></Route>
           <Route path="/all_leads" element={<AllLeadsPage />} />
+          <Route path="/reminders" element={<RemindersPage/>} />
         </Routes>
       </div>
     </Router>
