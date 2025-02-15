@@ -6,6 +6,7 @@ import AddLeadPage from './components/screens/AddLeadPage';
 import PipeLinePage from './components/screens/PipelinePage';
 import AllLeadsPage from './components/screens/AllLeadsPage'
 import RemindersPage from './components/screens/RemindersPage';
+import InvoicesPage from './components/screens/InvoicesPage';
 import './App.css';
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
           <Route path="/pipeline" element={<PipeLinePage />}></Route>
           <Route path="/all_leads" element={<AllLeadsPage />} />
           <Route path="/reminders" element={<RemindersPage/>} />
+          <Route path="/invoices" element={<InvoicesPage />} />
         </Routes>
       </div>
     </Router>
