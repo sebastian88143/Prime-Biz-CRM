@@ -18,7 +18,7 @@ const AddLeadsPage = () => {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100 pt-24 px-4 pb-4">
-      <div className="bg-blue-50 p-8 rounded-lg shadow-lg w-full max-w-6xl">
+      <div className="bg-blue-50 p-8 rounded-lg shadow-lg w-full max-w-8xl">
         <h1 className="text-2xl font-bold pb-8">All Leads</h1>
 
         <div className="mb-6">
@@ -37,6 +37,7 @@ const AddLeadsPage = () => {
           <div className="w-3/4">
             <label className="block text-sm font-medium mb-2">Size</label>
             <select className="bg-white border p-2 rounded w-full">
+              <option>None</option>
               <option>Small</option>
               <option>Medium</option>
               <option>Big</option>
@@ -45,6 +46,7 @@ const AddLeadsPage = () => {
           <div className="w-3/4">
             <label className="block text-sm font-medium mb-2">Industry</label>
             <select className="bg-white border p-2 rounded w-full">
+              <option>None</option>
               <option>Manufacturing</option>
               <option>Retail</option>
               <option>Services</option>
