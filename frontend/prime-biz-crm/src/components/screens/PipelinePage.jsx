@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { ArrowRight } from "lucide-react";
 
 const pipelineData = [
   {
@@ -39,18 +40,21 @@ const sectionColors = {
   Prospecting: "bg-blue-50 border-blue-400",
   Contacted: "bg-green-50 border-green-400",
   Offer: "bg-yellow-50 border-yellow-400",
-  Won: "bg-purple-50 border-purple-400 pointer-events-none",
+  Won: "bg-purple-50 border-purple-400",
 };
 
 const PipeLinePage = () => {
   const [selectedDeal, setSelectedDeal] = useState(null);
+  const [isWonDeal, setIsWonDeal] = useState(false);
 
-  const openPopup = (deal) => {
+  const openPopup = (deal, isWon) => {
     setSelectedDeal(deal);
+    setIsWonDeal(isWon);
   };
 
   const closePopup = () => {
     setSelectedDeal(null);
+    setIsWonDeal(false);
   };
 
   return (
@@ -61,25 +65,31 @@ const PipeLinePage = () => {
         <h2 className="text-2xl font-semibold text-gray-700 mb-4">Pipeline</h2>
 
         {/* Kolumny pod nagłówkiem */}
-        <div className="flex gap-6">
+        <div className="flex gap-6 items-center">
           {pipelineData.map((stage, index) => (
-            <div key={index} className={`shadow-md p-4 rounded-xl w-1/4 border ${sectionColors[stage.title]}`}>
-              <h2 className="text-lg font-semibold text-gray-700 text-center">{stage.title}</h2>
-              <p className="text-gray-500 text-sm mb-4 text-center">Value: {stage.value}</p>
-              {stage.deals.map((deal, i) => (
-                <div
-                  key={i}
-                  className={`bg-white p-3 rounded-lg shadow-sm mb-3 border border-gray-200 ${
-                    stage.title !== "Won" ? "cursor-pointer hover:bg-gray-200" : ""
-                  }`}
-                  onClick={() => stage.title !== "Won" && openPopup(deal)}
-                >
-                  <h3 className="text-gray-800 font-medium">{deal.company}</h3>
-                  <p className="text-gray-600 text-sm">Deal name: {deal.deal}</p>
-                  <p className="text-gray-500 text-sm">Value: {deal.value}</p>
-                </div>
-              ))}
-            </div>
+            <React.Fragment key={index}>
+              {/* Kolumna etapu */}
+              <div className={`shadow-md p-4 rounded-xl w-1/4 border ${sectionColors[stage.title]}`}>
+                <h2 className="text-lg font-semibold text-gray-700 text-center">{stage.title}</h2>
+                <p className="text-gray-500 text-sm mb-4 text-center">Value: {stage.value}</p>
+                {stage.deals.map((deal, i) => (
+                  <div
+                    key={i}
+                    className="bg-white p-3 rounded-lg shadow-sm mb-3 border border-gray-200 cursor-pointer hover:bg-gray-200"
+                    onClick={() => openPopup(deal, stage.title === "Won")}
+                  >
+                    <h3 className="text-gray-800 font-medium">{deal.company}</h3>
+                    <p className="text-gray-600 text-sm">Deal name: {deal.deal}</p>
+                    <p className="text-gray-500 text-sm">Value: {deal.value}</p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Strzałka, jeśli to nie jest ostatni etap */}
+              {index < pipelineData.length - 1 && (
+                <ArrowRight size={40} strokeWidth={6} className="text-gray-400" />
+              )}
+            </React.Fragment>
           ))}
         </div>
       </div>
@@ -88,9 +98,15 @@ const PipeLinePage = () => {
       {selectedDeal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
           <div className="bg-white p-6 rounded-lg shadow-lg w-80">
-            <h2 className="text-lg font-semibold text-gray-700">{selectedDeal.company}</h2>
-            <p className="text-gray-600">Deal name: {selectedDeal.deal}</p>
-            <p className="text-gray-500">Value: {selectedDeal.value}</p>
+            {isWonDeal ? (
+              <h2 className="text-lg font-semibold text-gray-700">This deal has been won!</h2>
+            ) : (
+              <>
+                <h2 className="text-lg font-semibold text-gray-700">{selectedDeal.company}</h2>
+                <p className="text-gray-600">Deal name: {selectedDeal.deal}</p>
+                <p className="text-gray-500">Value: {selectedDeal.value}</p>
+              </>
+            )}
             <button
               className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
               onClick={closePopup}
