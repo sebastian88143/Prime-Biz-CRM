@@ -18,7 +18,7 @@ function App() {
         <Routes>
           <Route path="/" element={<MainPage />} />
           <Route path="/add_lead" element={<AddLeadPage />} />
-          <Route path="/pipeline" element={<PipeLinePage />}></Route>
+          <Route path="/pipeline" element={<PipeLinePage />} />
           <Route path="/all_leads" element={<AllLeadsPage />} />
           <Route path="/analytics" element={<AnalyticsPage />} />
           <Route path="/reminders" element={<RemindersPage/>} />
