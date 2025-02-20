@@ -24,12 +24,33 @@ const AddLeadPage = () => {
                 <input type="text" className="w-full border border-gray-300 rounded-md p-2" placeholder="Value" />
               </div>
             </div>
-            {["Email", "Phone", "Address", "Website", "Industry", "Size"].map((field) => (
+            {["Email", "Phone", "Address", "Website"].map((field) => (
               <div key={field}>
                 <label className="block text-sm font-medium">{field}</label>
                 <input type="text" className="w-full border border-gray-300 rounded-md p-2" placeholder="Value" />
               </div>
             ))}
+            
+            {/* Dropdown dla Size */}
+            <div>
+              <label className="block text-sm font-medium">Size</label>
+              <select className="w-full border border-gray-300 rounded-md p-2">
+                <option value="Small">Small</option>
+                <option value="Medium">Medium</option>
+                <option value="Big">Big</option>
+              </select>
+            </div>
+
+            {/* Dropdown dla Industry */}
+            <div>
+              <label className="block text-sm font-medium">Industry</label>
+              <select className="w-full border border-gray-300 rounded-md p-2">
+                <option value="Manufacturing">Manufacturing</option>
+                <option value="Retail">Retail</option>
+                <option value="Services">Services</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
           </div>
 
           {/* Prawa strona - Notes + Checkbox */}
