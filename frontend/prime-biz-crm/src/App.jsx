@@ -5,6 +5,7 @@ import MainPage from './components/screens/MainPage'
 import AddLeadPage from './components/screens/AddLeadPage';
 import PipeLinePage from './components/screens/PipelinePage';
 import AllLeadsPage from './components/screens/AllLeadsPage'
+import AnalyticsPage from './components/screens/AnalyticsPage';
 import RemindersPage from './components/screens/RemindersPage';
 import InvoicesPage from './components/screens/InvoicesPage';
 import './App.css';
@@ -19,6 +20,7 @@ function App() {
           <Route path="/add_lead" element={<AddLeadPage />} />
           <Route path="/pipeline" element={<PipeLinePage />}></Route>
           <Route path="/all_leads" element={<AllLeadsPage />} />
+          <Route path="/analytics" element={<AnalyticsPage />} />
           <Route path="/reminders" element={<RemindersPage/>} />
           <Route path="/invoices" element={<InvoicesPage />} />
         </Routes>
