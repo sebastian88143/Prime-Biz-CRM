@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom"
 import axios from "axios";
 
 const LoginPage = ({ setToken }) => {
@@ -64,6 +65,14 @@ const LoginPage = ({ setToken }) => {
                         Login
                     </button>
                 </form>
+
+                {/* Register Link */}
+                <p className="text-center mt-4 text-sm">
+                    Don't have an account?{" "}
+                    <Link to="/register" className="text-blue-600 hover:underline">
+                        Sign up here
+                    </Link>
+                </p>
             </div>
         </div>
     );

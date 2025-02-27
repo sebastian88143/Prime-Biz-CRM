@@ -9,6 +9,7 @@ import AnalyticsPage from './components/screens/AnalyticsPage';
 import RemindersPage from './components/screens/RemindersPage';
 import InvoicesPage from './components/screens/InvoicesPage';
 import LoginPage from './components/screens/LoginPage';
+import RegisterPage from './components/screens/RegisterPage'
 import './App.css';
 
 function App() {
@@ -44,6 +45,7 @@ function App() {
         <Routes>
           <Route path="/" element={isAuthenticated ? <MainPage /> : <Navigate to="/login" />} />
           <Route path="/login" element={<LoginPage setToken={setToken} />} />
+          <Route path="/register" element={<RegisterPage />} />
           <Route path="/add_lead" element={isAuthenticated ? <AddLeadPage /> : <Navigate to="/login" />} />
           <Route path="/pipeline" element={isAuthenticated ? <PipeLinePage /> : <Navigate to="/login" />} />
           <Route path="/all_leads" element={isAuthenticated ? <AllLeadsPage /> : <Navigate to="/login" />} />

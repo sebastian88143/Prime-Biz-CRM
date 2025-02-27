@@ -1,12 +1,39 @@
 from .models import MyUser
 
-from django.contrib.auth.hashers import check_password
+from django.contrib.auth.hashers import check_password, make_password
+from django.db import IntegrityError
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 import jwt, datetime
 
 SECRET_KEY = "my_secret"
+
+@api_view(['POST'])
+def register(request):
+    data = request.data
+    username = data.get('username')
+    email = data.get('email')
+    password = data.get('password')
+
+    if not username or not password:
+        return Response({"error": "Username and password are required"}, status=400)
+
+    if MyUser.objects.filter(username=username).exists():
+        return Response({"error": "Username already exists. Choose a different one."}, status=400)
+
+    if MyUser.objects.filter(email=email).exists():
+        return Response({"error": "Email already exists. Try logging in."}, status=400)
+    
+    try:
+        user = MyUser.objects.create(username=username, password=make_password(password), email=email)
+        user.save()
+        return Response({"message": "User registered successfully!"}, status=201)
+    except IntegrityError:
+        return Response({"error": "An error occurred. Please try again."}, status=500)
+    except Exception as e:
+        return Response({"error": str(e)}, status=500)
+
 
 @api_view(["POST"])
 def login(request):
