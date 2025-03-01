@@ -1,7 +1,5 @@
-from .models import MyUser
-
 from django.contrib.auth.hashers import check_password, make_password
-from django.db import IntegrityError
+from django.contrib.auth.models import User
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
@@ -19,18 +17,16 @@ def register(request):
     if not username or not password:
         return Response({"error": "Username and password are required"}, status=400)
 
-    if MyUser.objects.filter(username=username).exists():
+    if User.objects.filter(username=username).exists():
         return Response({"error": "Username already exists. Choose a different one."}, status=400)
 
-    if MyUser.objects.filter(email=email).exists():
+    if User.objects.filter(email=email).exists():
         return Response({"error": "Email already exists. Try logging in."}, status=400)
     
     try:
-        user = MyUser.objects.create(username=username, password=make_password(password), email=email)
+        user = User.objects.create(username=username, email=email, password=make_password(password))
         user.save()
         return Response({"message": "User registered successfully!"}, status=201)
-    except IntegrityError:
-        return Response({"error": "An error occurred. Please try again."}, status=500)
     except Exception as e:
         return Response({"error": str(e)}, status=500)
 
@@ -42,15 +38,20 @@ def login(request):
     password = data.get("password")
 
     try:
-        user = MyUser.objects.get(username=username)
-        if check_password(password, user.password_hash):
-            token = jwt.encode({"id": user.id, "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1)},
-                               SECRET_KEY, algorithm="HS256")
-            return Response({"token": token})
-    except MyUser.DoesNotExist:
-        pass
+        user = User.objects.get(username=username)
 
-    return Response({"error": "Invalid credentials"}, status=400)
+        if check_password(password, user.password):
+            token = jwt.encode(
+                {"id": user.id, "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1)},
+                SECRET_KEY, 
+                algorithm="HS256"
+            )
+            return Response({"token": token})
+        else:
+            return Response({"error": "Invalid credentials"}, status=400)
+
+    except User.DoesNotExist:
+        return Response({"error": "Invalid credentials"}, status=400)
 
 
 @api_view(["GET"])
