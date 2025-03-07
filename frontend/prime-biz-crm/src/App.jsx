@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import axios from 'axios';
 import Navbar from './components/Navbar';
 import MainPage from './components/screens/MainPage';
 import AddLeadPage from './components/screens/AddLeadPage';
@@ -15,19 +16,18 @@ import './App.css';
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem("token"));
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(!!token);
 
   useEffect(() => {
     const checkAuth = async () => {
-      const storedToken = localStorage.getItem("token");
-      if (!storedToken) {
+      if (!token) {
         setIsAuthenticated(false);
         return;
       }
-  
+
       try {
         const res = await axios.get("http://localhost:8000/api/check-auth/", {
-          headers: { Authorization: `Bearer ${storedToken}` },
+          headers: { Authorization: `Bearer ${token}` },
         });
         setIsAuthenticated(res.status === 200);
       } catch (error) {
@@ -36,14 +36,14 @@ function App() {
         setToken(null);
       }
     };
-  
+
     checkAuth();
-  }, []);
+  }, [token]);
 
   return (
     <Router>
       <div className="App">
-        {isAuthenticated && <Navbar />}
+        {isAuthenticated && <Navbar setToken={setToken} setIsAuthenticated={setIsAuthenticated} />}
         <Routes>
           <Route path="/" element={<ProtectedRoute element={<MainPage />} isAuthenticated={isAuthenticated} />} />
           <Route path="/login" element={<LoginPage setToken={setToken} setIsAuthenticated={setIsAuthenticated} />} />

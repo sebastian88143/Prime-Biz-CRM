@@ -50,3 +50,20 @@
   opacity: 0.8;
   transform: scale(1.05);
 }
+
+.logout-button {
+  background-color: red;
+  color: white;
+  font-weight: bold;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  margin-left: auto;
+}
+
+.logout-button:hover {
+  background-color: darkred;
+  transform: scale(1.05);
+}
