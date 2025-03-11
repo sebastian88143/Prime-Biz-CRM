@@ -1,7 +1,7 @@
 @echo off
 SET MYSQL_USER=root
 SET MYSQL_PASSWORD=root123!
-SET DB_NAME=primebizcrmdb
+SET DB_NAME=prime_biz_crm_db
 SET DB_USER=django_user
 SET DB_PASSWORD=primebizcrm123!
 

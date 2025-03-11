@@ -86,7 +86,7 @@ WSGI_APPLICATION = 'prime_biz_crm_backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'primebizcrmdb',
+        'NAME': 'prime_biz_crm_db',
         'USER': 'django_user',
         'PASSWORD': 'primebizcrm123!',
         'HOST': 'localhost',
@@ -94,6 +94,7 @@ DATABASES = {
     }
 }
 
+AUTH_USER_MODEL = 'prime_biz_crm.CustomUser'
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators

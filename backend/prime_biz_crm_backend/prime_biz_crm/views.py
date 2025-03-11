@@ -1,11 +1,13 @@
-from django.contrib.auth.hashers import check_password, make_password
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+from django.contrib.auth.hashers import check_password
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 import jwt, datetime
 
 SECRET_KEY = "my_secret"
+
+User = get_user_model()
 
 @api_view(['POST'])
 def register(request):
@@ -24,7 +26,7 @@ def register(request):
         return Response({"error": "Email already exists. Try logging in."}, status=400)
     
     try:
-        user = User.objects.create(username=username, email=email, password=make_password(password))
+        user = User.objects.create_user(username=username, email=email, password=password)
         user.save()
         return Response({"message": "User registered successfully!"}, status=201)
     except Exception as e:
