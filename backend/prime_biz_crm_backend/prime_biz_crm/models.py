@@ -106,6 +106,7 @@ class Pipeline(models.Model):
 
 class Reminder(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255, default='Title')
     description = models.TextField()
     reminder_date = models.DateTimeField()
     created_at = models.DateTimeField(auto_now_add=True)
