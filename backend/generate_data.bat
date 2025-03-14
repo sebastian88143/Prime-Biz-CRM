@@ -1,12 +1,10 @@
 @echo off
 
-:: Database access settings
-set DB_NAME=prime_biz_crm_db
-set DB_USER=django_user
-set DB_PASSWORD=primebizcrm123!
-set DB_HOST=localhost
+:: Activate the virtual environment
+call venv\Scripts\activate
 
-:: Running SQL script
-mysql -u%DB_USER% -p%DB_PASSWORD% -h%DB_HOST% -D%DB_NAME% < seed_data.sql
+:: Run the Python script
+python prime_biz_crm_backend\seed_data.py
 
-echo Data inserted successfully into database!
+:: Deactivate the virtual environment
+deactivate
