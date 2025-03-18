@@ -13,7 +13,7 @@ def set_environment():
 def create_users():
     users_data = [
         {"username": "BusinessStrategist", "email": "strategist@example.com", "password": "bs123!", "is_active": True, "is_staff": True},
-        {"username": "ClientRelationsPro", "email": "relations@example.com", "password": "crpp123!", "is_active": True, "is_staff": True},
+        {"username": "ClientRelationsPro", "email": "relations@example.com", "password": "crp123!", "is_active": True, "is_staff": True},
         {"username": "RevenueLeader", "email": "revenue@example.com", "password": "rl123!", "is_active": True, "is_staff": True}
     ]
 
