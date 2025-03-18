@@ -2,4 +2,5 @@ Django
 mysqlclient
 djangorestframework
 django-cors-headers
+djangorestframework-simplejwt
 PyJWT

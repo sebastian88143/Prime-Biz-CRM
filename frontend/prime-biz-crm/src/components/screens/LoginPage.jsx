@@ -13,16 +13,16 @@ const LoginPage = ({ setToken, setIsAuthenticated }) => {
         try {
             const res = await axios.post("http://localhost:8000/api/login/", { username, password });
     
-            if (res.data && res.data.token) {
-                localStorage.setItem("token", res.data.token);
-                setToken(res.data.token);
+            if (res.data && res.data.access) {  
+                localStorage.setItem("token", res.data.access);
+                setToken(res.data.access);
                 setIsAuthenticated(true);
                 navigate("/");
             } else {
                 throw new Error("❌ Token not found in server response.");
             }
         } catch (err) {
-            console.error("❌ Login error:", err.response || err);
+            console.error("❌ Login error:", err.response?.status, err.response?.statusText, err.response?.data);
             setError("Incorrect login or password");
             setPassword("");
         }

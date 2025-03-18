@@ -1,9 +1,13 @@
-from django.contrib.auth import get_user_model
-from django.contrib.auth.hashers import check_password
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
+from.models import Lead, Reminder
 
-import jwt, datetime
+from django.contrib.auth import get_user_model
+
+from rest_framework import status
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework_simplejwt.tokens import RefreshToken
 
 SECRET_KEY = "my_secret"
 
@@ -34,6 +38,7 @@ def register(request):
 
 
 @api_view(["POST"])
+@permission_classes([AllowAny])
 def login(request):
     data = request.data
     username = data.get("username")
@@ -42,31 +47,64 @@ def login(request):
     try:
         user = User.objects.get(username=username)
 
-        if check_password(password, user.password):
-            token = jwt.encode(
-                {"id": user.id, "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1)},
-                SECRET_KEY, 
-                algorithm="HS256"
-            )
-            return Response({"token": token})
+        if user.check_password(password):
+            refresh = RefreshToken.for_user(user)
+            refresh["id"] = user.id
+            return Response({
+                "access": str(refresh.access_token),
+                "refresh": str(refresh)
+            })
         else:
             return Response({"error": "Invalid credentials"}, status=400)
 
     except User.DoesNotExist:
         return Response({"error": "Invalid credentials"}, status=400)
 
-
 @api_view(["GET"])
+@permission_classes([IsAuthenticated])
 def check_auth(request):
-    token = request.headers.get("Authorization")
+    auth = JWTAuthentication()
+    user, _ = auth.authenticate(request)
 
-    if not token:
-        return Response({"error": "Unauthorized"}, status=401)
-
-    try:
-        decoded = jwt.decode(token.split(" ")[1], SECRET_KEY, algorithms=["HS256"])
+    if user:
         return Response({"message": "Valid token"})
-    except jwt.ExpiredSignatureError:
-        return Response({"error": "Token expired"}, status=401)
-    except jwt.InvalidTokenError:
-        return Response({"error": "Invalid token"}, status=401)
+
+    return Response({"error": "Unauthorized"}, status=403)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+@authentication_classes([JWTAuthentication])
+def get_user_info(request):
+    try:
+        user = request.user
+        
+        user_data = {
+            "username": user.username,
+            "email": user.email
+        }
+
+        return Response({"user": user_data})
+    except Exception as e:
+        return Response({"error": str(e)}, status=400)
+    
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+@authentication_classes([JWTAuthentication])
+def get_top_leads(request):
+    try:
+        leads = Lead.objects.filter(created_by=request.user, top_lead=True)
+        lead_data = list(leads.values("company_name", "contact_person_name", "contact_person_surname", "email"))
+        return Response({"leads": lead_data})
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+@authentication_classes([JWTAuthentication])
+def get_reminders(request):
+    try:
+        reminders = Reminder.objects.filter(user=request.user)
+        reminder_data = list(reminders.values("title", "description", "reminder_date", "created_at"))
+        return Response({"reminders": reminder_data})
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)

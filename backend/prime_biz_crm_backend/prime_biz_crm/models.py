@@ -109,7 +109,7 @@ class Reminder(models.Model):
     title = models.CharField(max_length=255, default='Title')
     description = models.TextField()
     reminder_date = models.DateTimeField()
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         db_table = "Reminder"
