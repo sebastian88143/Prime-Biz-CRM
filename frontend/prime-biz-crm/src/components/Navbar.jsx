@@ -13,7 +13,7 @@ const Navbar = ({ setToken, setIsAuthenticated }) => {
 
   return (
     <nav className="navbar">
-      <div className="navbar-logo">LOGOPRIMEBIZ CRM</div>
+      <Link to="/" className="navbar-logo">LOGOPRIMEBIZ CRM</Link>
       <div className="navbar-links">
         <Link to="/add_lead" className="primary-link">Add New Lead</Link>
         <Link to="/pipeline" className="primary-link">Pipeline</Link>
