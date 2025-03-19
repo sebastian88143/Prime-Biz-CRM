@@ -94,7 +94,7 @@ def get_user_info(request):
 @authentication_classes([JWTAuthentication])
 def get_top_leads(request):
     try:
-        leads = Lead.objects.filter(created_by=request.user, top_lead=True)
+        leads = Lead.objects.filter(created_by=request.user, top_lead=True, converted_to_pipeline=False)
         lead_data = list(leads.values("company_name", "contact_person_name", "contact_person_surname", "email"))
         return Response({"leads": lead_data})
     except Exception as e:

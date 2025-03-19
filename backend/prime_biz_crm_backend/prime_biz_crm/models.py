@@ -70,6 +70,7 @@ class Lead(models.Model):
     size = models.CharField(max_length=6, choices=SIZE_CHOICES)
     top_lead = models.BooleanField(default=False)
     notes = models.TextField(null=True, blank=True)
+    converted_to_pipeline = models.BooleanField(default=False)
     created_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
