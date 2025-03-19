@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import login, register, check_auth, get_user_info, get_top_leads, get_reminders
+from .views import login, register, check_auth, get_user_info, get_top_leads, get_reminders, add_new_lead
 
 urlpatterns = [
     path('login/', login),
@@ -9,4 +9,5 @@ urlpatterns = [
     path('user_info/', get_user_info),
     path('top_leads/', get_top_leads),
     path('reminders/', get_reminders),
+    path('add_lead/', add_new_lead),
 ]

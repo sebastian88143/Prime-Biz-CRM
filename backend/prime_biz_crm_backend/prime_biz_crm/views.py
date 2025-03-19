@@ -1,6 +1,8 @@
 from.models import Lead, Reminder
 
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
+from django.core.validators import validate_email, RegexValidator, URLValidator
 
 from rest_framework import status
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
@@ -108,3 +110,57 @@ def get_reminders(request):
         return Response({"reminders": reminder_data})
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+@authentication_classes([JWTAuthentication])
+def add_new_lead(request):
+    try:
+        data = request.data
+        user = request.user
+
+        email = data.get("email")
+        if email:
+            try:
+                validate_email(email)
+            except ValidationError:
+                return Response({"error_fields": {"email": "Invalid email address."}}, status=400)
+
+        phone = data.get("phone")
+        if phone:
+            try:
+                phone_validator = RegexValidator(
+                    regex=r'^\+?1?\d{9,15}$',
+                    message="The phone number must contain 9 to 15 digits and may start with '+'."
+                )
+                phone_validator(phone)
+            except ValidationError:
+                return Response({"error_fields": {"phone": "Invalid phone number."}}, status=400)
+
+        website = data.get("website")
+        if website:
+            try:
+                url_validator = URLValidator()
+                url_validator(website)
+            except ValidationError:
+                return Response({"error_fields": {"website": "Invalid website URL."}}, status=400)
+
+        lead = Lead.objects.create(
+            company_name=data.get("company_name"),
+            contact_person_name=data.get("contact_person_name"),
+            contact_person_surname=data.get("contact_person_surname"),
+            email=email,
+            phone=phone,
+            address=data.get("address"),
+            website=website,
+            industry=data.get("industry"),
+            size=data.get("size"),
+            top_lead=data.get("top_lead", False),
+            notes=data.get("notes"),
+            created_by=user
+        )
+
+        return Response({"message": "Lead added successfully!", "lead_id": lead.id}, status=201)
+    
+    except Exception as e:
+        return Response({"error": str(e)}, status=400)
