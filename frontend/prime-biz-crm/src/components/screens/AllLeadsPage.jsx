@@ -1,19 +1,50 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const AddLeadsPage = () => {
-  // Stan do przechowywania wybranej karty oraz stanu modalu
+  const [leads, setLeads] = useState([]);
+  const [filters, setFilters] = useState({
+    search: "",
+    size: "None",
+    industry: "None",
+    topLeadsOnly: false,
+  });
+
   const [selectedLead, setSelectedLead] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Funkcja obsługująca kliknięcie w kartę
-  const handleCardClick = (leadName) => {
-    setSelectedLead(leadName);  // Ustawiamy nazwę wybranego leada
-    setIsModalOpen(true);  // Otwieramy popup
+  useEffect(() => {
+    fetchLeads();
+  }, [filters]);
+
+  const fetchLeads = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        console.error("No token found. Please log in.");
+        return;
+      }
+
+      const response = await axios.get('http://localhost:8000/api/all_leads/', {
+        params: filters,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      });
+
+      setLeads(response.data.leads);
+    } catch (error) {
+      console.error("Error fetching leads:", error.response || error.message);
+    }
   };
 
-  // Funkcja zamykająca modal
+  const handleCardClick = (leadName) => {
+    setSelectedLead(leadName);
+    setIsModalOpen(true);
+  };
+
   const closeModal = () => {
-    setIsModalOpen(false);  // Zamykamy popup
+    setIsModalOpen(false);
   };
 
   return (
@@ -26,65 +57,82 @@ const AddLeadsPage = () => {
           <div className="flex space-x-6">
             <input
               type="text"
-              placeholder="Value"
-              className="bg-white w-3/4 border p-2 rounded"
+              placeholder="Search by company name"
+              value={filters.search}
+              onChange={(e) => setFilters({ ...filters, search: e.target.value })}
+              className="bg-white w-full border p-2 rounded"
             />
-            <button className="w-1/4 bg-blue-500 text-white p-2 rounded">Search</button>
           </div>
         </div>
 
         <div className="flex mb-6 space-x-6 w-full">
           <div className="w-3/4">
             <label className="block text-sm font-medium mb-2">Size</label>
-            <select className="bg-white border p-2 rounded w-full">
-              <option>None</option>
-              <option>Small</option>
-              <option>Medium</option>
-              <option>Big</option>
+            <select
+              className="bg-white border p-2 rounded w-full"
+              value={filters.size}
+              onChange={(e) => setFilters({ ...filters, size: e.target.value })}
+            >
+              <option value="None">None</option>
+              <option value="Small">Small</option>
+              <option value="Medium">Medium</option>
+              <option value="Big">Big</option>
             </select>
           </div>
           <div className="w-3/4">
             <label className="block text-sm font-medium mb-2">Industry</label>
-            <select className="bg-white border p-2 rounded w-full">
-              <option>None</option>
-              <option>Manufacturing</option>
-              <option>Retail</option>
-              <option>Services</option>
-              <option>Other</option>
+            <select
+              className="bg-white border p-2 rounded w-full"
+              value={filters.industry}
+              onChange={(e) => setFilters({ ...filters, industry: e.target.value })}
+            >
+              <option value="None">None</option>
+              <option value="Manufacturing">Manufacturing</option>
+              <option value="Retail">Retail</option>
+              <option value="Services">Services</option>
+              <option value="Other">Other</option>
             </select>
           </div>
           <div className="flex items-center space-x-2 justify-center w-1/4 pt-6">
-            <input type="checkbox" className="form-checkbox" />
+            <input
+              type="checkbox"
+              className="form-checkbox"
+              value={filters.topLeadsOnly}
+              onChange={(e) => setFilters({ ...filters, topLeadsOnly: e.target.checked })}
+            />
             <span className="text-lg font-semibold">Top Leads Only</span>
           </div>
         </div>
 
         <div className="space-y-4">
-          {["TJX", "Costco", "The Home Depot", "Albertsons", "Walmart"].map((leadName, index) => (
+          {leads.map((lead) => (
             <div
-              key={index}
+              key={lead.id}
               className="p-4 rounded-lg shadow-md flex justify-between items-center bg-white hover:bg-gray-200 transition duration-300 cursor-pointer"
-              onClick={() => handleCardClick(leadName)}
+              onClick={() => handleCardClick(lead.company_name)}
             >
               <div>
-                <h2 className="text-xl font-semibold">{leadName}</h2>
-                <p className="text-sm">Retail</p>
+                <h2 className="text-xl font-semibold">{lead.company_name}</h2>
+                <p className="text-sm">{lead.industry}</p>
               </div>
-              <p className="text-sm text-gray-500">Added: 25/08/2024</p>
+              <div className="flex flex-col items-center">
+                <p className="text-sm text-gray-500">
+                  {new Date(lead.created_at).toLocaleDateString('en-GB')}
+                </p>
+                <p className="text-sm text-gray-500">
+                  {new Date(lead.created_at).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: true })}
+                </p>
+              </div>
             </div>
           ))}
         </div>
 
-        {/* Modal - popup */}
         {isModalOpen && (
           <div className="fixed inset-0 flex justify-center items-center bg-gray-500 bg-opacity-50 z-50">
             <div className="bg-white p-8 rounded-lg shadow-lg w-96">
               <h2 className="text-xl font-semibold mb-4">Selected Lead: {selectedLead}</h2>
               <p className="text-sm text-gray-500 mb-4">Here are the details of the selected lead.</p>
-              <button
-                onClick={closeModal} 
-                className="w-full bg-blue-500 text-white py-2 rounded"
-                >
+              <button onClick={closeModal} className="w-full bg-blue-500 text-white py-2 rounded">
                 Close
               </button>
             </div>
@@ -93,6 +141,6 @@ const AddLeadsPage = () => {
       </div>
     </div>
   );
-}
+};
 
 export default AddLeadsPage;

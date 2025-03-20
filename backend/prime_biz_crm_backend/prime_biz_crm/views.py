@@ -103,6 +103,33 @@ def get_top_leads(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 @authentication_classes([JWTAuthentication])
+def get_all_leads(request):
+    try:
+        leads = Lead.objects.filter(created_by=request.user, converted_to_pipeline=False)
+        
+        search_term = request.query_params.get("search")
+        size = request.query_params.get("size")
+        industry = request.query_params.get("industry")
+        top_lead = request.query_params.get("topLeadsOnly")
+        
+        if search_term:
+            leads = leads.filter(company_name__icontains=search_term)
+        if size and size != "None":
+            leads = leads.filter(size=size)
+        if industry and industry != "None":
+            leads = leads.filter(industry=industry)
+        if top_lead == "true":
+            leads = leads.filter(top_lead=True)
+
+        lead_data = list(leads.values("id", "company_name", "industry", "size", "top_lead", "created_at"))
+
+        return Response({"leads": lead_data}, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+@authentication_classes([JWTAuthentication])
 def get_reminders(request):
     try:
         reminders = Reminder.objects.filter(user=request.user)
