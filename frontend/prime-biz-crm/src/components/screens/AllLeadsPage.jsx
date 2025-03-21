@@ -3,7 +3,7 @@ import CurrentLeadPopup from '../CurrentLeadPopup';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const AddLeadsPage = () => {
+const AllLeadsPage = () => {
   const [leads, setLeads] = useState([]);
   const [filters, setFilters] = useState({
     search: "",
@@ -40,8 +40,8 @@ const AddLeadsPage = () => {
     }
   };
 
-  const handleCardClick = (leadName) => {
-    setSelectedLead(leadName);
+  const handleCardClick = (lead) => {
+    setSelectedLead(lead);
     setIsModalOpen(true);
   };
 
@@ -111,7 +111,7 @@ const AddLeadsPage = () => {
             <div
               key={lead.id}
               className="p-4 rounded-lg shadow-md flex justify-between items-center bg-white hover:bg-gray-200 transition duration-300 cursor-pointer"
-              onClick={() => handleCardClick(lead.company_name)}
+              onClick={() => handleCardClick(lead)}
             >
               <div>
                 <h2 className="text-xl font-semibold">{lead.company_name}</h2>
@@ -135,4 +135,4 @@ const AddLeadsPage = () => {
   );
 };
 
-export default AddLeadsPage;
+export default AllLeadsPage;

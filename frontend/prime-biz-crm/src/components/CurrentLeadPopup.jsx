@@ -1,7 +1,7 @@
 import React from "react";
 import { FaEdit, FaPlus, FaTrash } from "react-icons/fa";
 
-const CurrentLeadPopup = ({ isOpen, selectedLead, onClose, onEdit, onAddPipeline, onDelete }) => {
+const CurrentLeadPopup = ({ isOpen, selectedLead, onClose }) => {
     if (!isOpen) return null;
 
     const handleEditLead = () => {
@@ -20,9 +20,9 @@ const CurrentLeadPopup = ({ isOpen, selectedLead, onClose, onEdit, onAddPipeline
     };
 
     return (
-        <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-10 z-50 backdrop-blur-xs">
+        <div className="fixed inset-0 flex justify-center items-center backdrop-blur-xs">
             <div className="bg-white p-12 rounded-lg shadow-lg w-1/2 flex flex-col items-center justify-center">
-                <h2 className="text-xl font-semibold mb-4 text-center">Selected Lead: {selectedLead}</h2>
+                <h2 className="text-xl font-semibold mb-4 text-center">Selected Lead: {selectedLead.company_name}</h2>
                 <p className="text-sm text-gray-500 mb-4 text-center">Choose an action for the selected lead:</p>
 
                 <div className="flex space-x-4 mb-4 justify-center">
