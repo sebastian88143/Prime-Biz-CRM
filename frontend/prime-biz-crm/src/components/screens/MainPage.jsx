@@ -1,3 +1,5 @@
+import CurrentLeadPopup from "../CurrentLeadPopup";
+
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -29,16 +31,15 @@ const getGreeting = () => {
       : "Good Evening";
 };
 
-const handleClick = (item) => {
-  alert(`Clicked on: ${item}`);
-};
-
 const MainPage = () => {
   const [leads, setLeads] = useState([]);
   const [reminders, setReminders] = useState([]);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const token = localStorage.getItem("token");
+
+  const [selectedLead, setSelectedLead] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -71,6 +72,15 @@ const MainPage = () => {
     fetchData();
   }, [token]);
 
+  const handleCardClick = (leadName) => {
+    setSelectedLead(leadName);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <div className="w-full h-full flex flex-col pt-24 bg-blue-50">
       <div className="flex justify-start px-6">
@@ -98,7 +108,7 @@ const MainPage = () => {
               {leads.map((lead) => (
                 <li
                   key={lead.id}
-                  onClick={() => handleClick(lead.company_name)}
+                  onClick={() => handleCardClick(lead.company_name)}
                   className="cursor-pointer transition-all duration-300 ease-in-out hover:bg-blue-50 active:scale-95 p-4 rounded-lg shadow mb-2"
                 >
                   <p className="font-semibold text-base">{lead.company_name}</p>
@@ -139,6 +149,8 @@ const MainPage = () => {
 
         {/* Empty Space to Create Gap */}
         <div className="flex-grow w-1/3"></div>
+
+        <CurrentLeadPopup isOpen={isModalOpen} selectedLead={selectedLead} onClose={closeModal} />
       </div>
     </div>
   );

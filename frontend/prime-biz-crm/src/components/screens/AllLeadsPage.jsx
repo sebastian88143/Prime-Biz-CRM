@@ -1,3 +1,5 @@
+import CurrentLeadPopup from '../CurrentLeadPopup';
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -127,17 +129,7 @@ const AddLeadsPage = () => {
           ))}
         </div>
 
-        {isModalOpen && (
-          <div className="fixed inset-0 flex justify-center items-center bg-gray-500 bg-opacity-50 z-50">
-            <div className="bg-white p-8 rounded-lg shadow-lg w-96">
-              <h2 className="text-xl font-semibold mb-4">Selected Lead: {selectedLead}</h2>
-              <p className="text-sm text-gray-500 mb-4">Here are the details of the selected lead.</p>
-              <button onClick={closeModal} className="w-full bg-blue-500 text-white py-2 rounded">
-                Close
-              </button>
-            </div>
-          </div>
-        )}
+        <CurrentLeadPopup isOpen={isModalOpen} selectedLead={selectedLead} onClose={closeModal} />
       </div>
     </div>
   );
