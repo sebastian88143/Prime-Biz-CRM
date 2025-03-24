@@ -95,7 +95,7 @@ def get_user_info(request):
 def get_top_leads(request):
     try:
         leads = Lead.objects.filter(created_by=request.user, top_lead=True, converted_to_pipeline=False)
-        lead_data = list(leads.values("company_name", "contact_person_name", "contact_person_surname", "email"))
+        lead_data = list(leads.values("id", "company_name", "contact_person_name", "contact_person_surname", "email"))
         return Response({"leads": lead_data})
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)

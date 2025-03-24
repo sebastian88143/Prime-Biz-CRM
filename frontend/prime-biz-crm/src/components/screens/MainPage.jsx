@@ -59,7 +59,7 @@ const MainPage = () => {
             headers: { Authorization: `Bearer ${token}` },
           }),
         ]);
-
+        
         setLeads(leadsRes.data.leads);
         setReminders(remindersRes.data.reminders);
         setLoading(false);
@@ -72,8 +72,8 @@ const MainPage = () => {
     fetchData();
   }, [token]);
 
-  const handleCardClick = (leadName) => {
-    setSelectedLead(leadName);
+  const handleCardClick = (lead) => {
+    setSelectedLead(lead);
     setIsModalOpen(true);
   };
 
@@ -108,7 +108,7 @@ const MainPage = () => {
               {leads.map((lead) => (
                 <li
                   key={lead.id}
-                  onClick={() => handleCardClick(lead.company_name)}
+                  onClick={() => handleCardClick(lead)}
                   className="cursor-pointer transition-all duration-300 ease-in-out hover:bg-blue-50 active:scale-95 p-4 rounded-lg shadow mb-2"
                 >
                   <p className="font-semibold text-base">{lead.company_name}</p>
