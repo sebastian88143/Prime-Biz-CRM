@@ -191,3 +191,85 @@ def add_new_lead(request):
     
     except Exception as e:
         return Response({"error": str(e)}, status=400)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+@authentication_classes([JWTAuthentication])
+def get_lead_by_id(request, lead_id):
+    try:
+        lead = Lead.objects.get(id=lead_id, created_by=request.user)
+        
+        lead_data = {
+            "company_name": lead.company_name,
+            "contact_person_name": lead.contact_person_name,
+            "contact_person_surname": lead.contact_person_surname,
+            "email": lead.email,
+            "phone": lead.phone,
+            "address": lead.address,
+            "website": lead.website,
+            "industry": lead.industry,
+            "size": lead.size,
+            "top_lead": lead.top_lead,
+            "notes": lead.notes,
+        }
+
+        return Response({"lead": lead_data}, status=status.HTTP_200_OK)
+    except Lead.DoesNotExist:
+        return Response({"error": "Lead not found"}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(["PUT"])
+@permission_classes([IsAuthenticated])
+@authentication_classes([JWTAuthentication])
+def update_lead(request, lead_id):
+    try:
+        lead = Lead.objects.get(id=lead_id, created_by=request.user)
+        data = request.data
+
+        email = data.get("email", lead.email)
+        if email:
+            try:
+                validate_email(email)
+            except ValidationError:
+                return Response({"error_fields": {"email": "Invalid email address."}}, status=400)
+
+        phone = data.get("phone", lead.phone)
+        if phone:
+            try:
+                phone_validator = RegexValidator(
+                    regex=r'^\+?1?\d{9,15}$',
+                    message="The phone number must contain 9 to 15 digits and may start with '+'."
+                )
+                phone_validator(phone)
+            except ValidationError:
+                return Response({"error_fields": {"phone": "Invalid phone number."}}, status=400)
+
+        website = data.get("website", lead.website)
+        if website:
+            try:
+                url_validator = URLValidator()
+                url_validator(website)
+            except ValidationError:
+                return Response({"error_fields": {"website": "Invalid website URL."}}, status=400)
+
+        lead.company_name = data.get("company_name", lead.company_name) or lead.company_name
+        lead.contact_person_name = data.get("contact_person_name", lead.contact_person_name) or lead.contact_person_name
+        lead.contact_person_surname = data.get("contact_person_surname", lead.contact_person_surname) or lead.contact_person_surname
+        lead.email = email
+        lead.phone = phone
+        lead.address = data.get("address", lead.address) or lead.address
+        lead.website = website
+        lead.industry = data.get("industry", lead.industry) or lead.industry
+        lead.size = data.get("size", lead.size) or lead.size
+        lead.top_lead = data.get("top_lead", lead.top_lead)
+        lead.notes = data.get("notes", lead.notes) or lead.notes
+
+        lead.save()
+
+        return Response({"message": "Lead updated successfully!"}, status=status.HTTP_200_OK)
+
+    except Lead.DoesNotExist:
+        return Response({"error": "Lead not found"}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)

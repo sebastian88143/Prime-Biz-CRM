@@ -4,6 +4,7 @@ import axios from 'axios';
 import Navbar from './components/Navbar';
 import MainPage from './components/screens/MainPage';
 import AddLeadPage from './components/screens/AddLeadPage';
+import EditLeadPage from './components/screens/EditLeadPage';
 import PipeLinePage from './components/screens/PipelinePage';
 import AllLeadsPage from './components/screens/AllLeadsPage';
 import AnalyticsPage from './components/screens/AnalyticsPage';
@@ -54,6 +55,7 @@ function App() {
           <Route path="/analytics" element={<ProtectedRoute element={<AnalyticsPage />} isAuthenticated={isAuthenticated} />} />
           <Route path="/reminders" element={<ProtectedRoute element={<RemindersPage />} isAuthenticated={isAuthenticated} />} />
           <Route path="/invoices" element={<ProtectedRoute element={<InvoicesPage />} isAuthenticated={isAuthenticated} />} />
+          <Route path="/lead/:lead_id" element={<ProtectedRoute element={<EditLeadPage />} isAuthenticated={isAuthenticated} />} />
         </Routes>
       </div>
     </Router>

@@ -1,12 +1,15 @@
 import React from "react";
 import { FaEdit, FaPlus, FaTrash } from "react-icons/fa";
+import { useNavigate } from "react-router-dom"
 
 const CurrentLeadPopup = ({ isOpen, selectedLead, onClose }) => {
-    if (!isOpen) return null;
+    if (!isOpen || !selectedLead) return null;
+
+    const navigate = useNavigate();
 
     const handleEditLead = () => {
-        console.log("Edit Lead:", selectedLead);
-        // Tutaj dodaj logikę do edycji leada
+        onClose();
+        navigate(`/lead/${selectedLead.id}`, { state: { lead: selectedLead } });
     };
 
     const handleAddPipeline = () => {
