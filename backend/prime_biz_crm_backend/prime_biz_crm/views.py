@@ -180,7 +180,6 @@ def add_new_lead(request):
             contact_person_surname=data.get("contact_person_surname"),
             email=email,
             phone=phone,
-            address=data.get("address"),
             website=website,
             industry=data.get("industry"),
             size=data.get("size"),
@@ -207,7 +206,6 @@ def get_lead_by_id(request, lead_id):
             "contact_person_surname": lead.contact_person_surname,
             "email": lead.email,
             "phone": lead.phone,
-            "address": lead.address,
             "website": lead.website,
             "industry": lead.industry,
             "size": lead.size,
@@ -260,7 +258,6 @@ def update_lead(request, lead_id):
         lead.contact_person_surname = data.get("contact_person_surname", lead.contact_person_surname) or lead.contact_person_surname
         lead.email = email
         lead.phone = phone
-        lead.address = data.get("address", lead.address) or lead.address
         lead.website = website
         lead.industry = data.get("industry", lead.industry) or lead.industry
         lead.size = data.get("size", lead.size) or lead.size

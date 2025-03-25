@@ -64,7 +64,6 @@ class Lead(models.Model):
     contact_person_surname = models.CharField(max_length=255)
     email = models.EmailField(null=True, blank=True)
     phone = models.CharField(max_length=20, validators=[phone_regex], null=True, blank=True)
-    address =  models.CharField(max_length=255, null=True, blank=True)
     website = models.URLField(null=True, blank=True)
     industry = models.CharField(max_length=13, choices=INDUSTRY_CHOICES)
     size = models.CharField(max_length=6, choices=SIZE_CHOICES)
