@@ -13,8 +13,8 @@ const CurrentLeadPopup = ({ isOpen, selectedLead, onClose }) => {
     };
 
     const handleAddPipeline = () => {
-        console.log("Add Pipeline for Lead:", selectedLead);
-        // Tutaj dodaj logikę do dodania pipeline
+        onClose();
+        navigate(`/add_pipeline/${selectedLead.id}`, { state: {lead: selectedLead } });
     };
 
     const handleDeleteLead = () => {
