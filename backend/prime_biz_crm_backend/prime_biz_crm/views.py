@@ -1,4 +1,4 @@
-from.models import Lead, Reminder
+from.models import Lead, Pipeline, Reminder
 
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
@@ -10,6 +10,8 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken
+
+from decimal import Decimal
 
 SECRET_KEY = "my_secret"
 
@@ -273,3 +275,49 @@ def update_lead(request, lead_id):
         return Response({"error": "Lead not found"}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+@authentication_classes([JWTAuthentication])
+def add_new_pipeline(request, lead_id):
+    try:
+        data = request.data
+        user = request.user
+
+        deal_name = data.get("deal_name", "").strip()
+
+        if not deal_name:
+            return Response({"error_fields": {"deal_name": "This field is required."}}, status=400)
+
+        expected_value = data.get("expected_deal_value", "0")
+        try:
+            expected_value = Decimal(expected_value)
+            if expected_value < 0:
+                return Response({"error_fields": {"expected_deal_value": "Value must be positive."}}, status=400)
+        except:
+            return Response({"error_fields": {"expected_deal_value": "Invalid numeric value."}}, status=400)
+
+        lead = Lead.objects.filter(id=lead_id).first()
+        if not lead:
+            return Response({"error": "Lead not found."}, status=404)
+
+        pipeline_entry = Pipeline.objects.create(
+            lead=lead,
+            deal_name=deal_name,
+            expected_value=expected_value,
+            created_by=user
+        )
+
+        lead.converted_to_pipeline = True
+        lead.save(update_fields=["converted_to_pipeline"])
+
+        return Response({
+            "message": "Pipeline entry added successfully!",
+            "pipeline_id": pipeline_entry.id,
+            "lead_updated": True,
+            },
+            status=201
+        )
+
+    except Exception as e:
+        return Response({"error": str(e)}, status=400)
