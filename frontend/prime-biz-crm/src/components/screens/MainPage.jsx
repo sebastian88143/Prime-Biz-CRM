@@ -43,7 +43,7 @@ const MainPage = () => {
 
   useEffect(() => {
     fetchData();
-  });
+  }, []);
 
   const fetchData = async () => {
     const token = localStorage.getItem("token");
