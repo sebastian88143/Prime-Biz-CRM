@@ -335,3 +335,26 @@ def delete_lead(request, lead_id):
     
     except Exception as e:
         return Response({"error": str(e)}, status=400)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+@authentication_classes([JWTAuthentication])
+def get_all_pipelines(request):
+    try:
+        pipelines = Pipeline.objects.filter(created_by=request.user)
+
+        pipeline_data = []
+        for pipeline in pipelines:
+            pipeline_data.append({
+                "id": pipeline.id,
+                "deal_name": pipeline.deal_name,
+                "expected_value": str(pipeline.expected_value),
+                "stage": pipeline.stage,
+                "company_name": pipeline.lead.company_name if pipeline.lead else "Unknown",
+                "lead_id": pipeline.lead_id
+            })
+
+        return Response({"pipelines": pipeline_data}, status=status.HTTP_200_OK)
+
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
