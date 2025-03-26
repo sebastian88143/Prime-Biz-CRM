@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaEdit, FaPlus, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom"
 
-const CurrentLeadPopup = ({ isOpen, selectedLead, onClose }) => {
+const CurrentLeadPopup = ({ isOpen, selectedLead, onClose, onLeadDeleted }) => {
     if (!isOpen || !selectedLead) return null;
+
+    const [message, setMessage] = useState("");
+    const [messageType, setMessageType] = useState("");
 
     const navigate = useNavigate();
 
@@ -14,12 +17,38 @@ const CurrentLeadPopup = ({ isOpen, selectedLead, onClose }) => {
 
     const handleAddPipeline = () => {
         onClose();
-        navigate(`/add_pipeline/${selectedLead.id}`, { state: {lead: selectedLead } });
+        navigate(`/add_pipeline/${selectedLead.id}`, { state: { lead: selectedLead } });
     };
 
-    const handleDeleteLead = () => {
-        console.log("Delete Lead:", selectedLead);
-        // Tutaj dodaj logikę do usunięcia leada
+    const handleDeleteLead = async () => {
+        try {
+            const response = await fetch(`http://localhost:8000/api/delete_lead/${selectedLead.id}/`, {
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ${localStorage.getItem("token")}`,
+                    "Content-Type": "application/json"
+                },
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                setMessage("Lead deleted successfully!");
+                setMessageType("success");
+                setTimeout(() => {
+                    onClose();
+                    if (onLeadDeleted) {
+                        onLeadDeleted();
+                    }
+                }, 1500);
+            } else {
+                setMessage(data.error || "Something went wrong.");
+                setMessageType("error")
+            }
+        } catch (error) {
+            setMessage("An error occurred. Please try again.");
+            setMessageType("error");
+        }
     };
 
     return (
@@ -54,6 +83,14 @@ const CurrentLeadPopup = ({ isOpen, selectedLead, onClose }) => {
                 <button onClick={onClose} className="w-full bg-blue-500 text-white py-2 rounded">
                     Close
                 </button>
+
+                {message && (
+                    <div
+                        className={`w-full p-3 text-center mt-6 rounded ${messageType === "success" ? "bg-green-500" : "bg-red-500"} text-white`}
+                    >
+                        {message}
+                    </div>
+                )}
             </div>
         </div>
     );

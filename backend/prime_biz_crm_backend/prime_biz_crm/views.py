@@ -318,3 +318,20 @@ def add_new_pipeline(request, lead_id):
 
     except Exception as e:
         return Response({"error": str(e)}, status=400)
+
+@api_view(["DELETE"])
+@permission_classes([IsAuthenticated])
+@authentication_classes([JWTAuthentication])
+def delete_lead(request, lead_id):
+    try:
+        lead = Lead.objects.get(id=lead_id, created_by=request.user)
+
+        if not lead:
+            return Response({"error": "Lead not found or you do not have permission to delete it."}, status=404)
+        
+        lead.delete()
+
+        return Response({"message": "Lead deleted successfully."}, status=200)
+    
+    except Exception as e:
+        return Response({"error": str(e)}, status=400)

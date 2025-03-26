@@ -129,7 +129,7 @@ const AllLeadsPage = () => {
           ))}
         </div>
 
-        <CurrentLeadPopup isOpen={isModalOpen} selectedLead={selectedLead} onClose={closeModal} />
+        <CurrentLeadPopup isOpen={isModalOpen} selectedLead={selectedLead} onClose={closeModal} onLeadDeleted={fetchLeads} />
       </div>
     </div>
   );

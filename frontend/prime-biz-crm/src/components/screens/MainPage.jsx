@@ -42,35 +42,35 @@ const MainPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (!token) return;
-
-      try {
-        const userRes = await axios.get("http://localhost:8000/api/user_info/", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setUser(userRes.data.user);
-
-        const [leadsRes, remindersRes] = await Promise.all([
-          axios.get("http://localhost:8000/api/top_leads/", {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-          axios.get("http://localhost:8000/api/reminders/", {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-        ]);
-        
-        setLeads(leadsRes.data.leads);
-        setReminders(remindersRes.data.reminders);
-        setLoading(false);
-      } catch (error) {
-        console.error("❌ Error fetching data:", error);
-        setLoading(false);
-      }
-    };
-
     fetchData();
-  }, [token]);
+  });
+
+  const fetchData = async () => {
+    const token = localStorage.getItem("token");
+
+    try {
+      const userRes = await axios.get("http://localhost:8000/api/user_info/", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setUser(userRes.data.user);
+
+      const [leadsRes, remindersRes] = await Promise.all([
+        axios.get("http://localhost:8000/api/top_leads/", {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+        axios.get("http://localhost:8000/api/reminders/", {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+      ]);
+
+      setLeads(leadsRes.data.leads);
+      setReminders(remindersRes.data.reminders);
+      setLoading(false);
+    } catch (error) {
+      console.error("❌ Error fetching data:", error);
+      setLoading(false);
+    }
+  };
 
   const handleCardClick = (lead) => {
     setSelectedLead(lead);
@@ -150,7 +150,7 @@ const MainPage = () => {
         {/* Empty Space to Create Gap */}
         <div className="flex-grow w-1/3"></div>
 
-        <CurrentLeadPopup isOpen={isModalOpen} selectedLead={selectedLead} onClose={closeModal} />
+        <CurrentLeadPopup isOpen={isModalOpen} selectedLead={selectedLead} onClose={closeModal} onLeadDeleted={fetchData} />
       </div>
     </div>
   );
