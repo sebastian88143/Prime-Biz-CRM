@@ -3,6 +3,7 @@ from.models import Lead, Pipeline, Reminder
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email, RegexValidator, URLValidator
+from django.utils import timezone
 
 from rest_framework import status
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
@@ -341,7 +342,7 @@ def delete_lead(request, lead_id):
 @authentication_classes([JWTAuthentication])
 def get_all_pipelines(request):
     try:
-        pipelines = Pipeline.objects.filter(created_by=request.user)
+        pipelines = Pipeline.objects.filter(status="Active", created_by=request.user)
 
         pipeline_data = []
         for pipeline in pipelines:
@@ -436,3 +437,18 @@ def move_pipeline_stage(request, pipeline_id):
         return Response({"error": "Invalid pipeline stage"}, status=status.HTTP_400_BAD_REQUEST)
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+@authentication_classes([JWTAuthentication])
+def mark_pipeline_as_lost(request, pipeline_id):
+    try:
+        pipeline = Pipeline.objects.get(id=pipeline_id, created_by=request.user)
+
+        pipeline.status = 'Lost'
+        pipeline.lost_date = timezone.now()
+        pipeline.save()
+
+        return Response({"message": "Pipeline marked as lost."}, status=status.HTTP_200_OK)
+    except Pipeline.DoesNotExist:
+        return Response({"error": "Pipeline not found."}, status=status.HTTP_404_NOT_FOUND)

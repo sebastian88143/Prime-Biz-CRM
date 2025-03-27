@@ -38,10 +38,28 @@ const CurrentPipelinePopup = ({ isOpen, selectedDeal, onClose, onDealUpdated }) 
         }
     };
 
-    const handleMarkAsLost = async () => {
-        console.log(`Marking deal ${selectedDeal.id} as lost and removing...`);
-        //onClose();
-        //if (onDealUpdated) onDealUpdated();
+    const handleMarkAsLostAndDelete = async () => {
+        try {
+            const token = localStorage.getItem("token");
+            const response = await fetch(`http://localhost:8000/api/pipeline/${selectedDeal.id}/mark_as_lost/`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || "Failed to mark pipeline as lost");
+            }
+
+            onDealUpdated();
+            onClose();
+        } catch (error) {
+            console.error("Error mark pipeline as lost:", error);
+        }
     };
 
     const handleGenerateInvoice = () => {
@@ -99,7 +117,7 @@ const CurrentPipelinePopup = ({ isOpen, selectedDeal, onClose, onDealUpdated }) 
                                 <FaArrowRight className="mr-2" /> Move to Next Stage
                             </button>
                             <button
-                                onClick={handleMarkAsLost}
+                                onClick={handleMarkAsLostAndDelete}
                                 className="flex items-center bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
                             >
                                 <FaTrash className="mr-2" /> Mark as Lost & Remove

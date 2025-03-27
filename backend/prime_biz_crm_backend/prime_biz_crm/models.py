@@ -89,10 +89,18 @@ class Pipeline(models.Model):
         ('Won', 'Won'),
     ]
 
+    STATUS_CHOICES = [
+        ('Active', 'Active'),
+        ('Lost', 'Lost'),
+        ('Won', 'Won'),
+    ]
+
     lead = models.ForeignKey(Lead, null=True, on_delete=models.SET_NULL)
     deal_name = models.CharField(max_length=255)
     expected_value = models.DecimalField(max_digits=10, decimal_places=2)
     stage = models.CharField(max_length=20, choices=STAGE_CHOICES, default='Prospecting')
+    status = models.CharField(max_length=6, choices=STATUS_CHOICES, default='Active')
+    lost_date = models.DateTimeField(null=True, blank=True)
     created_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 

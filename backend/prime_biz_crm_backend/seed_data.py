@@ -65,7 +65,16 @@ def create_leads():
         {"company_name": "Lambda Tech", "contact_person_name": "William", "contact_person_surname": "Scott", "email": "lambda.tech@example.com", "phone": "+3234567896", "website": "https://www.lambda-tech.com", "industry": "Manufacturing", "size": "Big", "top_lead": True, "notes": "Strategic partner", "converted_to_pipeline": False, "created_by": 3},
         {"company_name": "Nu Consulting", "contact_person_name": "James", "contact_person_surname": "Nelson", "email": "nu.consulting@example.com", "phone": "+3234567897", "website": "", "industry": "Other", "size": "Small", "top_lead": False, "notes": "Awaiting proposal", "converted_to_pipeline": False, "created_by": 3},
         {"company_name": "Omicron Digital", "contact_person_name": "Sophia", "contact_person_surname": "Mitchell", "email": "omicron.digital@example.com", "phone": "+3234567898", "website": "https://www.omicron-digital.com", "industry": "Retail", "size": "Medium", "top_lead": True, "notes": "High potential deal", "converted_to_pipeline": True, "created_by": 3},
-        {"company_name": "Rho Ventures", "contact_person_name": "Benjamin", "contact_person_surname": "Perez", "email": "rho.ventures@example.com", "phone": "+3234567899", "website": "https://www.rho-ventures.com", "industry": "Services", "size": "Big", "top_lead": False, "notes": "Exploring collaboration", "converted_to_pipeline": False, "created_by": 3}
+        {"company_name": "Rho Ventures", "contact_person_name": "Benjamin", "contact_person_surname": "Perez", "email": "rho.ventures@example.com", "phone": "+3234567899", "website": "https://www.rho-ventures.com", "industry": "Services", "size": "Big", "top_lead": False, "notes": "Exploring collaboration", "converted_to_pipeline": False, "created_by": 3},
+        
+        # Leads for statistic
+        {"company_name": "Omega Group", "contact_person_name": "Sarah", "contact_person_surname": "Green", "email": "omega@example.com", "phone": "+1234567895", "website": "https://www.omega-group.com", "industry": "Other", "size": "Big", "top_lead": True, "notes": "Key potential partner", "converted_to_pipeline": True, "created_by": 1},
+        {"company_name": "Theta Enterprises", "contact_person_name": "David", "contact_person_surname": "Black", "email": "theta@example.com", "phone": "+1234567896", "website": "https://www.theta-enterprises.com", "industry": "Retial", "size": "Small", "top_lead": False, "notes": "Interested in early discussions", "converted_to_pipeline": True, "created_by": 1},
+        {"company_name": "Zeta Solutions", "contact_person_name": "Emily", "contact_person_surname": "Harris", "email": "zeta@example.com", "phone": "+1234567897", "website": "https://www.zeta-solutions.com", "industry": "Services", "size": "Medium", "top_lead": True, "notes": "Urgent need for services", "converted_to_pipeline": True, "created_by": 2},
+        {"company_name": "Sigma Innovations", "contact_person_name": "William", "contact_person_surname": "Clark", "email": "sigma@example.com", "phone": "+1234567898", "website": "https://www.sigma-innovations.com", "industry": "Other", "size": "Big", "top_lead": False, "notes": "Exploring potential collaboration", "converted_to_pipeline": True, "created_by": 2},
+        {"company_name": "Kappa Technologies", "contact_person_name": "Olivia", "contact_person_surname": "Taylor", "email": "kappa@example.com", "phone": "+1234567899", "website": "https://www.kappa-tech.com", "industry": "Other", "size": "Small", "top_lead": True, "notes": "Highly engaged, requires demo", "converted_to_pipeline": True, "created_by": 2},
+        {"company_name": "Lambda Industries", "contact_person_name": "Daniel", "contact_person_surname": "Wilson", "email": "lambda@example.com", "phone": "+1234567800", "website": "https://www.lambda-industries.com", "industry": "Retial", "size": "Medium", "top_lead": True, "notes": "Needs further qualification", "converted_to_pipeline": True, "created_by": 3},
+        {"company_name": "Phi Consulting", "contact_person_name": "Sophia", "contact_person_surname": "Adams", "email": "phi@example.com", "phone": "+1234567801", "website": "https://www.phi-consulting.com", "industry": "Manufacturing", "size": "Big", "top_lead": True, "notes": "High potential for partnership", "converted_to_pipeline": False, "created_by": 3}
     ]
 
     leads_to_create = []
@@ -95,18 +104,26 @@ def create_leads():
 
 def create_pipelines():
     pipelines_data = [
-        {"lead_id": 1, "deal_name": "Cloud Infrastructure Overhaul", "expected_value": 350000.00, "stage": "Prospecting", "created_by_id": 1},
-        {"lead_id": 2, "deal_name": "Premium Engine Components Deal", "expected_value": 500000.00, "stage": "Prospecting", "created_by_id": 1},
-        {"lead_id": 3, "deal_name": "Business-Class Laptop Deployment", "expected_value": 250000.00, "stage": "Prospecting", "created_by_id": 1},
-        {"lead_id": 5, "deal_name": "Customized Workstations for Teams", "expected_value": 420000.00, "stage": "Prospecting", "created_by_id": 1},
-        {"lead_id": 8, "deal_name": "Data Recovery & Backup Solutions", "expected_value": 180000.00, "stage": "Prospecting", "created_by_id": 1},
-        {"lead_id": 11, "deal_name": "Suspension Upgrade Kit", "expected_value": 300000.00, "stage": "Negotiation", "created_by_id": 2},
-        {"lead_id": 12, "deal_name": "Anti-Glare Glasses for Professionals", "expected_value": 120000.00, "stage": "Negotiation", "created_by_id": 2},
-        {"lead_id": 16, "deal_name": "Next-Gen Server Deployment", "expected_value": 450000.00, "stage": "Negotiation", "created_by_id": 2},
-        {"lead_id": 19, "deal_name": "Work-from-Home Laptop Bundle", "expected_value": 220000.00, "stage": "Proposal Sent", "created_by_id": 2},
-        {"lead_id": 25, "deal_name": "Comprehensive Coverage Plan", "expected_value": 150000.00, "stage": "Won", "created_by_id": 3},
-        {"lead_id": 26, "deal_name": "Digital Transformation Partnership", "expected_value": 1800000.00, "stage": "Negotiation", "created_by_id": 3},
-        {"lead_id": 29, "deal_name": "Alloy Wheels & Tires Package", "expected_value": 80000.00, "stage": "Prospecting", "created_by_id": 3}
+        {"lead_id": 1, "deal_name": "Cloud Infrastructure Overhaul", "expected_value": 350000.00, "stage": "Prospecting", "status": "Active", "created_by_id": 1},
+        {"lead_id": 2, "deal_name": "Premium Engine Components Deal", "expected_value": 500000.00, "stage": "Prospecting", "status": "Active", "created_by_id": 1},
+        {"lead_id": 3, "deal_name": "Business-Class Laptop Deployment", "expected_value": 250000.00, "stage": "Prospecting", "status": "Active", "created_by_id": 1},
+        {"lead_id": 5, "deal_name": "Customized Workstations for Teams", "expected_value": 420000.00, "stage": "Prospecting", "status": "Active", "created_by_id": 1},
+        {"lead_id": 8, "deal_name": "Data Recovery & Backup Solutions", "expected_value": 180000.00, "stage": "Prospecting", "status": "Active", "created_by_id": 1},
+        {"lead_id": 11, "deal_name": "Suspension Upgrade Kit", "expected_value": 300000.00, "stage": "Negotiation", "status": "Active", "created_by_id": 2},
+        {"lead_id": 12, "deal_name": "Anti-Glare Glasses for Professionals", "expected_value": 120000.00, "stage": "Negotiation", "status": "Active", "created_by_id": 2},
+        {"lead_id": 16, "deal_name": "Next-Gen Server Deployment", "expected_value": 450000.00, "stage": "Negotiation", "status": "Active", "created_by_id": 2},
+        {"lead_id": 19, "deal_name": "Work-from-Home Laptop Bundle", "expected_value": 220000.00, "stage": "Proposal Sent", "status": "Active", "created_by_id": 2},
+        {"lead_id": 25, "deal_name": "Comprehensive Coverage Plan", "expected_value": 150000.00, "stage": "Won", "status": "Active", "created_by_id": 3},
+        {"lead_id": 26, "deal_name": "Digital Transformation Partnership", "expected_value": 1800000.00, "stage": "Negotiation", "status": "Active", "created_by_id": 3},
+        {"lead_id": 29, "deal_name": "Alloy Wheels & Tires Package", "expected_value": 80000.00, "stage": "Prospecting", "status": "Active", "created_by_id": 3},
+
+        # New pipelines for statistic
+        {"lead_id": 31, "deal_name": "Enterprise Software Licensing", "expected_value": 750000.00, "stage": "Won", "status": "Won", "created_by_id": 1},
+        {"lead_id": 32, "deal_name": "Cloud Software Licensing", "expected_value": 950000.00, "stage": "Proposal Sent", "status": "Lost", "created_by_id": 1},
+        {"lead_id": 33, "deal_name": "AI-Powered Analytics Platform", "expected_value": 650000.00, "stage": "Won", "status": "Won", "created_by_id": 2},
+        {"lead_id": 34, "deal_name": "Next-Gen Cybersecurity Solutions", "expected_value": 500000.00, "stage": "Prospecting", "status": "Lost", "created_by_id": 2},
+        {"lead_id": 35, "deal_name": "Smart Office Automation System", "expected_value": 300000.00, "stage": "Proposal Sent", "status": "Lost", "created_by_id": 2},
+        {"lead_id": 36, "deal_name": "Cloud-Based Collaboration Suite", "expected_value": 400000.00, "stage": "Negotiation", "status": "Lost", "created_by_id": 3},
     ]
     
     pipelines_to_create = []
@@ -123,6 +140,7 @@ def create_pipelines():
             deal_name=pipeline_data["deal_name"],
             expected_value=pipeline_data["expected_value"],
             stage=pipeline_data["stage"],
+            status=pipeline_data["status"],
             created_by_id=pipeline_data["created_by_id"],
         )
         pipelines_to_create.append(pipeline_to_create)
