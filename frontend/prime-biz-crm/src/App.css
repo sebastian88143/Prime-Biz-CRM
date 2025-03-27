@@ -1,5 +1,6 @@
 /* Navbar style */
 .navbar {
+  max-height: 80px;
   position: fixed;
   top: 0;
   left: 0;
@@ -12,10 +13,10 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.navbar-logo {
-  font-size: 20px;
-  font-weight: bold;
-  color: black;
+.logo-image {
+  max-height: 200px;
+  width: 200px;
+  margin-top: 20px;
 }
 
 .navbar-links {

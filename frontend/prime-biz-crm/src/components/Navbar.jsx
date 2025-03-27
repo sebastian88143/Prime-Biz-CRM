@@ -1,3 +1,5 @@
+import logo from '../assets/PrimeBIZ_logo.png'
+
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -13,7 +15,9 @@ const Navbar = ({ setToken, setIsAuthenticated }) => {
 
   return (
     <nav className="navbar">
-      <Link to="/" className="navbar-logo">LOGOPRIMEBIZ CRM</Link>
+      <Link to="/" className="navbar-logo">
+        <img src={logo} alt="LOGO PRIMEBIZ CRM" className="logo-image" />
+      </Link>
       <div className="navbar-links">
         <Link to="/add_lead" className="primary-link">Add New Lead</Link>
         <Link to="/pipeline" className="primary-link">Pipeline</Link>
