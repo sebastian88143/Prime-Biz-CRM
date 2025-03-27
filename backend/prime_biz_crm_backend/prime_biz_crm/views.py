@@ -19,6 +19,7 @@ SECRET_KEY = "my_secret"
 User = get_user_model()
 
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def register(request):
     data = request.data
     username = data.get('username')

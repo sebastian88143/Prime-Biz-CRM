@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import axios from 'axios';
-import Navbar from './components/Navbar';
+import MainLayout from './components/MainLayout';
 import MainPage from './components/screens/MainPage';
 import AddLeadPage from './components/screens/AddLeadPage';
 import AddPipelinePage from './components/screens/AddPipelinePage';
@@ -46,20 +46,90 @@ function App() {
   return (
     <Router>
       <div className="App">
-        {isAuthenticated && <Navbar setToken={setToken} setIsAuthenticated={setIsAuthenticated} />}
         <Routes>
-          <Route path="/" element={<ProtectedRoute element={<MainPage />} isAuthenticated={isAuthenticated} />} />
           <Route path="/login" element={<LoginPage setToken={setToken} setIsAuthenticated={setIsAuthenticated} />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/add_lead" element={<ProtectedRoute element={<AddLeadPage />} isAuthenticated={isAuthenticated} />} />
-          <Route path="/pipeline" element={<ProtectedRoute element={<PipeLinePage />} isAuthenticated={isAuthenticated} />} />
-          <Route path="/all_leads" element={<ProtectedRoute element={<AllLeadsPage />} isAuthenticated={isAuthenticated} />} />
-          <Route path="/analytics" element={<ProtectedRoute element={<AnalyticsPage />} isAuthenticated={isAuthenticated} />} />
-          <Route path="/reminders" element={<ProtectedRoute element={<RemindersPage />} isAuthenticated={isAuthenticated} />} />
-          <Route path="/invoices" element={<ProtectedRoute element={<InvoicesPage />} isAuthenticated={isAuthenticated} />} />
-          <Route path="/lead/:lead_id" element={<ProtectedRoute element={<EditLeadPage />} isAuthenticated={isAuthenticated} />} />
-          <Route path="/add_pipeline/:lead_id" element={<ProtectedRoute element={<AddPipelinePage />} isAuthenticated={isAuthenticated} />} />
-          <Route path="/pipeline/:pipeline_id" element={<ProtectedRoute element={<EditPipelinePage />} isAuthenticated={isAuthenticated} />} />
+
+          <Route
+            path="/"
+            element={
+              <MainLayout setToken={setToken} setIsAuthenticated={setIsAuthenticated}>
+                <ProtectedRoute element={<MainPage />} isAuthenticated={isAuthenticated} />
+              </MainLayout>
+            }
+          />
+          <Route
+            path="/add_lead"
+            element={
+              <MainLayout setToken={setToken} setIsAuthenticated={setIsAuthenticated}>
+                <ProtectedRoute element={<AddLeadPage />} isAuthenticated={isAuthenticated} />
+              </MainLayout>
+            }
+          />
+          <Route
+            path="/pipeline"
+            element={
+              <MainLayout setToken={setToken} setIsAuthenticated={setIsAuthenticated}>
+                <ProtectedRoute element={<PipeLinePage />} isAuthenticated={isAuthenticated} />
+              </MainLayout>
+            }
+          />
+          <Route
+            path="/all_leads"
+            element={
+              <MainLayout setToken={setToken} setIsAuthenticated={setIsAuthenticated}>
+                <ProtectedRoute element={<AllLeadsPage />} isAuthenticated={isAuthenticated} />
+              </MainLayout>
+            }
+          />
+          <Route
+            path="/analytics"
+            element={
+              <MainLayout setToken={setToken} setIsAuthenticated={setIsAuthenticated}>
+                <ProtectedRoute element={<AnalyticsPage />} isAuthenticated={isAuthenticated} />
+              </MainLayout>
+            }
+          />
+          <Route
+            path="/reminders"
+            element={
+              <MainLayout setToken={setToken} setIsAuthenticated={setIsAuthenticated}>
+                <ProtectedRoute element={<RemindersPage />} isAuthenticated={isAuthenticated} />
+              </MainLayout>
+            }
+          />
+          <Route
+            path="/invoices"
+            element={
+              <MainLayout setToken={setToken} setIsAuthenticated={setIsAuthenticated}>
+                <ProtectedRoute element={<InvoicesPage />} isAuthenticated={isAuthenticated} />
+              </MainLayout>
+            }
+          />
+          <Route
+            path="/lead/:lead_id"
+            element={
+              <MainLayout setToken={setToken} setIsAuthenticated={setIsAuthenticated}>
+                <ProtectedRoute element={<EditLeadPage />} isAuthenticated={isAuthenticated} />
+              </MainLayout>
+            }
+          />
+          <Route
+            path="/add_pipeline/:lead_id"
+            element={
+              <MainLayout setToken={setToken} setIsAuthenticated={setIsAuthenticated}>
+                <ProtectedRoute element={<AddPipelinePage />} isAuthenticated={isAuthenticated} />
+              </MainLayout>
+            }
+          />
+          <Route
+            path="/pipeline/:pipeline_id"
+            element={
+              <MainLayout setToken={setToken} setIsAuthenticated={setIsAuthenticated}>
+                <ProtectedRoute element={<EditPipelinePage />} isAuthenticated={isAuthenticated} />
+              </MainLayout>
+            }
+          />
         </Routes>
       </div>
     </Router>
