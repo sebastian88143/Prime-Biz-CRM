@@ -67,10 +67,28 @@ const CurrentPipelinePopup = ({ isOpen, selectedDeal, onClose, onDealUpdated }) 
         //onClose();
     };
 
-    const handleRemoveFromPipeline = async () => {
-        console.log(`Removing deal ${selectedDeal.id} from pipeline...`);
-        //onClose();
-        //if (onDealUpdated) onDealUpdated();
+    const handleMarkAsWinAndDelete = async () => {
+        try {
+            const token = localStorage.getItem("token");
+            const response = await fetch(`http://localhost:8000/api/pipeline/${selectedDeal.id}/mark_as_won/`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || "Failed to mark pipeline as won");
+            }
+
+            onDealUpdated();
+            onClose();
+        } catch (error) {
+            console.error("Error mark pipeline as won:", error);
+        }
     };
 
     return (
@@ -96,7 +114,7 @@ const CurrentPipelinePopup = ({ isOpen, selectedDeal, onClose, onDealUpdated }) 
                                 <FaFileInvoice className="mr-2" /> Generate Invoice
                             </button>
                             <button
-                                onClick={handleRemoveFromPipeline}
+                                onClick={handleMarkAsWinAndDelete}
                                 className="flex items-center bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
                             >
                                 <FaTrash className="mr-2" /> Remove from Pipeline

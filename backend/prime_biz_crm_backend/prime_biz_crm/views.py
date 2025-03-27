@@ -452,3 +452,17 @@ def mark_pipeline_as_lost(request, pipeline_id):
         return Response({"message": "Pipeline marked as lost."}, status=status.HTTP_200_OK)
     except Pipeline.DoesNotExist:
         return Response({"error": "Pipeline not found."}, status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+@authentication_classes([JWTAuthentication])
+def mark_pipeline_as_won(request, pipeline_id):
+    try:
+        pipeline = Pipeline.objects.get(id=pipeline_id, created_by=request.user)
+
+        pipeline.status = 'Won'
+        pipeline.save()
+
+        return Response({"message": "Pipeline marked as won."}, status=status.HTTP_200_OK)
+    except Pipeline.DoesNotExist:
+        return Response({"error": "Pipeline not found."}, status=status.HTTP_404_NOT_FOUND)
