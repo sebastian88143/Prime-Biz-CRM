@@ -10,8 +10,8 @@ const CurrentPipelinePopup = ({ isOpen, selectedDeal, onClose, onDealUpdated }) 
 
     const handleEditDeal = () => {
         console.log("Edit data");
-        //onClose();
-        //navigate(`/edit_deal/${selectedDeal.id}`, { state: { deal: selectedDeal } });
+        onClose();
+        navigate(`/pipeline/${selectedDeal.id}`, { state: { deal: selectedDeal } });
     };
 
     const handleMoveToNextStage = () => {

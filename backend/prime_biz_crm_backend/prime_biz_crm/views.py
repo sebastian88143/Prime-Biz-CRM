@@ -358,3 +358,57 @@ def get_all_pipelines(request):
 
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'PUT'])
+@permission_classes([IsAuthenticated])
+@authentication_classes([JWTAuthentication])
+def pipeline_detail(request, pipeline_id):
+    try:
+        pipeline = Pipeline.objects.get(id=pipeline_id, created_by=request.user)
+
+        if request.method == "GET":
+            lead = Lead.objects.get(id=pipeline.lead_id)
+
+            pipeline_data = {
+            "id": pipeline.id,
+            "deal_name": pipeline.deal_name,
+            "expected_value": float(pipeline.expected_value),
+            "lead": {
+                "id": lead.id if lead else None,
+                "company_name": lead.company_name if lead else "",
+                "contact_person_name": lead.contact_person_name if lead else "",
+                "contact_person_surname": lead.contact_person_surname if lead else "",
+                "email": lead.email if lead else "",
+                "phone": lead.phone if lead else "",
+                "website": lead.website if lead else "",
+                "industry": lead.industry if lead else "",
+                "size": lead.size if lead else "",
+                "top_lead": lead.top_lead if lead else False,
+                "notes": lead.notes if lead else "",
+                }
+            }
+
+            return Response({"pipeline": pipeline_data}, status=status.HTTP_200_OK)
+        
+        elif request.method == "PUT":
+            data = request.data
+
+            pipeline.deal_name = data.get("deal_name", pipeline.deal_name) or pipeline.deal_name
+
+            expected_value = data.get("expected_value")
+            if expected_value is not None and expected_value != "":
+                try:
+                    pipeline.expected_value = Decimal(expected_value)
+                    if pipeline.expected_value < 0:
+                        return Response({"error_fields": {"expected_value": "Value must be positive."}}, status=400)
+                except:
+                    return Response({"error_fields": {"expected_value": "Invalid numeric value."}}, status=400)
+
+            pipeline.expected_value = data.get("expected_value", pipeline.expected_value) or pipeline.expected_value
+
+            pipeline.save()
+
+            return Response({"message": "Piepeline updated successfully!"}, status=status.HTTP_200_OK)
+
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)

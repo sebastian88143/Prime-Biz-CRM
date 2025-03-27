@@ -1,7 +1,7 @@
 from django.urls import path
 
 from .views import (login, register, check_auth, get_user_info, get_top_leads, get_all_leads, get_reminders,
-    add_new_lead, get_lead_by_id, update_lead, add_new_pipeline, delete_lead, get_all_pipelines
+    add_new_lead, get_lead_by_id, update_lead, add_new_pipeline, delete_lead, get_all_pipelines, pipeline_detail
 )
 urlpatterns = [
     path('login/', login),
@@ -17,4 +17,5 @@ urlpatterns = [
     path('add_pipeline/<int:lead_id>/', add_new_pipeline),
     path('delete_lead/<int:lead_id>/', delete_lead),
     path('pipelines/', get_all_pipelines),
+    path('pipeline/<int:pipeline_id>/', pipeline_detail),
 ]

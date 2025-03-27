@@ -6,6 +6,7 @@ import MainPage from './components/screens/MainPage';
 import AddLeadPage from './components/screens/AddLeadPage';
 import AddPipelinePage from './components/screens/AddPipelinePage';
 import EditLeadPage from './components/screens/EditLeadPage';
+import EditPipelinePage from './components/screens/EditPipelinePage';
 import PipeLinePage from './components/screens/PipelinePage';
 import AllLeadsPage from './components/screens/AllLeadsPage';
 import AnalyticsPage from './components/screens/AnalyticsPage';
@@ -58,6 +59,7 @@ function App() {
           <Route path="/invoices" element={<ProtectedRoute element={<InvoicesPage />} isAuthenticated={isAuthenticated} />} />
           <Route path="/lead/:lead_id" element={<ProtectedRoute element={<EditLeadPage />} isAuthenticated={isAuthenticated} />} />
           <Route path="/add_pipeline/:lead_id" element={<ProtectedRoute element={<AddPipelinePage />} isAuthenticated={isAuthenticated} />} />
+          <Route path="/pipeline/:pipeline_id" element={<ProtectedRoute element={<EditPipelinePage />} isAuthenticated={isAuthenticated} />} />
         </Routes>
       </div>
     </Router>
