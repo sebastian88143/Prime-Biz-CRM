@@ -135,7 +135,7 @@ def get_all_leads(request):
 @authentication_classes([JWTAuthentication])
 def get_reminders(request):
     try:
-        reminders = Reminder.objects.filter(user=request.user)
+        reminders = Reminder.objects.filter(user=request.user).order_by("-created_at")[:3]
         reminder_data = list(reminders.values("title", "description", "reminder_date", "created_at"))
         return Response({"reminders": reminder_data})
     except Exception as e:

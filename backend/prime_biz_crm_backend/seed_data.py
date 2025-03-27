@@ -153,15 +153,15 @@ def create_pipelines():
 
 def create_reminders():
     reminders_data = [
-        {"user_id": 1, "title": "Follow-up with Alpha Corp", "description": "Check in with John Doe regarding the proposal.", "reminder_date": now() + timedelta(days=2)},
-        {"user_id": 1, "title": "Send updated quote to Beta LLC", "description": "Prepare and send the revised quote to Jane Smith.", "reminder_date": now() + timedelta(days=3)},
-        {"user_id": 1, "title": "Schedule meeting with Gamma Ltd", "description": "Arrange a meeting with Alice Johnson.", "reminder_date": now() + timedelta(days=5)},
-        {"user_id": 1, "title": "Review Delta Inc contract", "description": "Go through the contract details before signing.", "reminder_date": now() + timedelta(days=7)},
-        {"user_id": 2, "title": "Follow up with Lambda Corp", "description": "Discuss project scope with Jack Brown.", "reminder_date": now() + timedelta(days=1)},
-        {"user_id": 2, "title": "Check progress with Mu LLC", "description": "See if Sophia Green has reviewed the offer.", "reminder_date": now() + timedelta(days=4)},
-        {"user_id": 2, "title": "Confirm deal with Nu Ltd", "description": "Ensure Henry Johnson signs the agreement.", "reminder_date": now() + timedelta(days=6)},
-        {"user_id": 3, "title": "Negotiate with Vega Corp", "description": "Finalize contract details with Daniel Carter.", "reminder_date": now() + timedelta(days=2)},
-        {"user_id": 3, "title": "Prepare report for Omega Solutions", "description": "Summarize key points before meeting with Sarah Harris.", "reminder_date": now() + timedelta(days=5)},
+        {"user_id": 1, "title": "Follow-up with Alpha Corp", "description": "Check in with John Doe regarding the proposal.", "created_at": now() - timedelta(days=2, hours=2), "reminder_date": now() + timedelta(days=2)},
+        {"user_id": 1, "title": "Send updated quote to Beta LLC", "description": "Prepare and send the revised quote to Jane Smith.", "created_at": now() - timedelta(days=3, hours=3), "reminder_date": now() + timedelta(days=3)},
+        {"user_id": 1, "title": "Schedule meeting with Gamma Ltd", "description": "Arrange a meeting with Alice Johnson.", "created_at": now() - timedelta(days=4, hours=2), "reminder_date": now() + timedelta(days=5)},
+        {"user_id": 1, "title": "Review Delta Inc contract", "description": "Go through the contract details before signing.", "created_at": now() - timedelta(days=1, hours=2, minutes=5), "reminder_date": now() + timedelta(days=7)},
+        {"user_id": 2, "title": "Follow up with Lambda Corp", "description": "Discuss project scope with Jack Brown.", "created_at": now() - timedelta(days=3, hours=6, minutes=15), "reminder_date": now() + timedelta(days=1)},
+        {"user_id": 2, "title": "Check progress with Mu LLC", "description": "See if Sophia Green has reviewed the offer.", "created_at": now() - timedelta(days=2, hours=6, minutes=18), "reminder_date": now() + timedelta(days=4)},
+        {"user_id": 2, "title": "Confirm deal with Nu Ltd", "description": "Ensure Henry Johnson signs the agreement.", "created_at": now() - timedelta(days=1, hours=5, minutes=32), "reminder_date": now() + timedelta(days=6)},
+        {"user_id": 3, "title": "Negotiate with Vega Corp", "description": "Finalize contract details with Daniel Carter.", "created_at": now() - timedelta(days=3, hours=1, minutes=7), "reminder_date": now() + timedelta(days=2)},
+        {"user_id": 3, "title": "Prepare report for Omega Solutions", "description": "Summarize key points before meeting with Sarah Harris.", "created_at": now() - timedelta(days=1, minutes=35), "reminder_date": now() + timedelta(days=5)},
     ]
 
     reminders_to_create = []
@@ -178,6 +178,7 @@ def create_reminders():
             title=reminder_data["title"],
             description=reminder_data["description"],
             reminder_date=reminder_data["reminder_date"],
+            created_at=reminder_data["created_at"],
         )
         reminders_to_create.append(reminder_to_create)
 
