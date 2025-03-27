@@ -412,3 +412,27 @@ def pipeline_detail(request, pipeline_id):
 
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+@authentication_classes([JWTAuthentication])
+def move_pipeline_stage(request, pipeline_id):
+    try:
+        pipeline = Pipeline.objects.get(id=pipeline_id, created_by=request.user)
+
+        stage_order = ["Prospecting", "Negotiation", "Proposal Sent", "Won"]
+        current_index = stage_order.index(pipeline.stage)
+
+        if current_index < len(stage_order) - 1:
+            pipeline.stage = stage_order[current_index + 1]
+            pipeline.save()
+            return Response({"message": "Pipeline stage updated", "new_stage": pipeline.stage}, status=status.HTTP_200_OK)
+        else:
+            return Response({"message": "Pipeline is already at the final stage"}, status=status.HTTP_400_BAD_REQUEST)
+
+    except Pipeline.DoesNotExist:
+        return Response({"error": "Pipeline not found"}, status=status.HTTP_404_NOT_FOUND)
+    except ValueError:
+        return Response({"error": "Invalid pipeline stage"}, status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)

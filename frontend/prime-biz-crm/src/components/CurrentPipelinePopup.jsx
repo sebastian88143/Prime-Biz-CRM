@@ -14,10 +14,28 @@ const CurrentPipelinePopup = ({ isOpen, selectedDeal, onClose, onDealUpdated }) 
         navigate(`/pipeline/${selectedDeal.id}`, { state: { deal: selectedDeal } });
     };
 
-    const handleMoveToNextStage = () => {
-        console.log(`Moving deal ${selectedDeal.id} to the next stage...`);
-        //onClose();
-        //if (onDealUpdated) onDealUpdated();
+    const handleMoveToNextStage = async () => {
+        try {
+            const token = localStorage.getItem("token");
+            const response = await fetch(`http://localhost:8000/api/pipeline/${selectedDeal.id}/move_stage/`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || "Failed to update stage");
+            }
+
+            onDealUpdated();
+            onClose();
+        } catch (error) {
+            console.error("Error moving deal to next stage:", error);
+        }
     };
 
     const handleMarkAsLost = async () => {

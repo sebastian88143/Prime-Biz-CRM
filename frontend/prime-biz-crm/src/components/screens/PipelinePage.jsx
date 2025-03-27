@@ -6,7 +6,7 @@ import { ArrowRight } from "lucide-react";
 const sectionColors = {
   Prospecting: "bg-blue-50 border-blue-400",
   Negotiation: "bg-green-50 border-green-400",
-  ProposalSent: "bg-yellow-50 border-yellow-400",
+  "Proposal Sent": "bg-yellow-50 border-yellow-400",
   Won: "bg-purple-50 border-purple-400",
 };
 
@@ -62,7 +62,7 @@ const PipeLinePage = () => {
         return acc;
       }, {});
 
-      const stageOrder = ["Prospecting", "Negotiation", "ProposalSent", "Won"];
+      const stageOrder = ["Prospecting", "Negotiation", "Proposal Sent", "Won"];
       const sortedData = Object.values(groupedData)
         .map((stage) => ({
           ...stage,
@@ -119,7 +119,7 @@ const PipeLinePage = () => {
         </div>
       </div>
 
-      <CurrentPipelinePopup isOpen={isPopupOpen} selectedDeal={selectedDeal} onClose={closePopup} />
+      <CurrentPipelinePopup isOpen={isPopupOpen} selectedDeal={selectedDeal} onClose={closePopup} onDealUpdated={fetchPipelineData} />
     </div>
   );
 };
