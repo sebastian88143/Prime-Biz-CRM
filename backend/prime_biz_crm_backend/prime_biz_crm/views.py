@@ -13,10 +13,25 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from decimal import Decimal
+import re
 
 SECRET_KEY = "my_secret"
 
 User = get_user_model()
+
+def validate_and_format_website(website):
+    if website:
+        pattern = r"^www\.[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$"
+        if re.match(pattern, website):
+            website = f"https://{website}"
+        
+        url_validator = URLValidator()
+        try:
+            url_validator(website)
+        except ValidationError:
+            return None
+    
+    return website
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
@@ -170,10 +185,9 @@ def add_new_lead(request):
 
         website = data.get("website")
         if website:
-            try:
-                url_validator = URLValidator()
-                url_validator(website)
-            except ValidationError:
+            website = validate_and_format_website(website)
+
+            if website is None:
                 return Response({"error_fields": {"website": "Invalid website URL."}}, status=400)
 
         lead = Lead.objects.create(
@@ -247,12 +261,11 @@ def update_lead(request, lead_id):
             except ValidationError:
                 return Response({"error_fields": {"phone": "Invalid phone number."}}, status=400)
 
-        website = data.get("website", lead.website)
+        website = data.get("website")
         if website:
-            try:
-                url_validator = URLValidator()
-                url_validator(website)
-            except ValidationError:
+            website = validate_and_format_website(website)
+            
+            if website is None:
                 return Response({"error_fields": {"website": "Invalid website URL."}}, status=400)
 
         lead.company_name = data.get("company_name", lead.company_name) or lead.company_name
