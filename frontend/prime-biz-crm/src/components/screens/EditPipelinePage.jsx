@@ -13,8 +13,8 @@ const EditPipelinePage = () => {
             contact_person_name: "",
             contact_person_surname: "",
             email: "",
-            phone: "",
             address: "",
+            phone: "",
             website: "",
             industry: "Manufacturing",
             size: "Small",
@@ -100,8 +100,8 @@ const EditPipelinePage = () => {
                             contact_person_name: "",
                             contact_person_surname: "",
                             email: "",
-                            phone: "",
                             address: "",
+                            phone: "",
                             website: "",
                             industry: "Manufacturing",
                             size: "Small",
@@ -168,6 +168,15 @@ const EditPipelinePage = () => {
                                 name="email"
                                 value={formData.lead.email} readOnly
                                 className={`w-full border border-gray-300 rounded-md p-2`}
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium">Address</label>
+                            <input
+                                type="text"
+                                name="address"
+                                value={formData.lead.address} readOnly
+                                className="w-full border border-gray-300 rounded-md p-2"
                             />
                         </div>
                         <div>

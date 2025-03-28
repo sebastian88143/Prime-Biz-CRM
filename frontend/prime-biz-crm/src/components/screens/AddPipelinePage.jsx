@@ -10,6 +10,7 @@ const AddPipelinePage = () => {
         contact_person_name: "",
         contact_person_surname: "",
         email: "",
+        address: "",
         phone: "",
         website: "",
         industry: "Manufacturing",
@@ -84,6 +85,7 @@ const AddPipelinePage = () => {
                         contact_person_name: "",
                         contact_person_surname: "",
                         email: "",
+                        address: "",
                         phone: "",
                         website: "",
                         industry: "Manufacturing",
@@ -153,6 +155,13 @@ const AddPipelinePage = () => {
                                 className="w-full border border-gray-300 rounded-md p-2"
                             />
                         </div>
+                        <label className="block text-sm font-medium">Address</label>
+                            <input
+                                type="text"
+                                name="address"
+                                value={formData.address} readOnly
+                                className="w-full border border-gray-300 rounded-md p-2"
+                            />
                         <div>
                             <label className="block text-sm font-medium">Phone</label>
                             <input

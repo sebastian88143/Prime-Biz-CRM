@@ -19,8 +19,13 @@ class CustomUserManager(BaseUserManager):
         return user
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
+    default_address = "Prime Biz CRM Ltd, Unit 15, Tech Park Business Centre, 42 Innovation Street, London, EC1A 4J, PUnited Kingdom"
+    default_phone = "+442079460123"
+
     username = models.CharField(max_length=50, unique=True)
     email = models.EmailField(unique=True)
+    address = models.TextField(default=default_address)
+    phone = models.CharField(max_length=20, default=default_phone)
     created_at = models.DateTimeField(auto_now_add=True)
 
     is_active = models.BooleanField(default=True)
@@ -64,6 +69,7 @@ class Lead(models.Model):
     contact_person_surname = models.CharField(max_length=255)
     email = models.EmailField(null=True, blank=True)
     phone = models.CharField(max_length=20, validators=[phone_regex], null=True, blank=True)
+    address = models.TextField(null=True, blank=True)
     website = models.URLField(null=True, blank=True)
     industry = models.CharField(max_length=13, choices=INDUSTRY_CHOICES)
     size = models.CharField(max_length=6, choices=SIZE_CHOICES)

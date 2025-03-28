@@ -10,8 +10,8 @@ const EditLeadPage = () => {
     contact_person_name: "",
     contact_person_surname: "",
     email: "",
-    phone: "",
     address: "",
+    phone: "",
     website: "",
     industry: "Manufacturing",
     size: "Small",
@@ -88,8 +88,8 @@ const EditLeadPage = () => {
             contact_person_name: "",
             contact_person_surname: "",
             email: "",
-            phone: "",
             address: "",
+            phone: "",
             website: "",
             industry: "Manufacturing",
             size: "Small",
@@ -163,6 +163,16 @@ return (
             {errorFields.email && (
                 <p className="text-red-500 text-sm">{errorFields.email}</p>
             )}
+
+            <label className="block text-sm font-medium">Address</label>
+            <input
+              type="text"
+              name="address"
+              value={formData.address}
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded-md p-2"
+            />
+
           </div>
           <div>
             <label className="block text-sm font-medium">Phone</label>

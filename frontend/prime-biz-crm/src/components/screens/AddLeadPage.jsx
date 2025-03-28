@@ -6,6 +6,7 @@ const AddLeadPage = () => {
     contact_person_name: "",
     contact_person_surname: "",
     email: "",
+    address: "",
     phone: "",
     website: "",
     industry: "Manufacturing",
@@ -60,6 +61,7 @@ const AddLeadPage = () => {
             contact_person_name: "",
             contact_person_surname: "",
             email: "",
+            address: "",
             phone: "",
             website: "",
             industry: "Manufacturing",
@@ -113,6 +115,11 @@ const AddLeadPage = () => {
               {errorFields.email && (
                 <p className="text-red-500 text-sm">{errorFields.email}</p>
               )}
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium">Address</label>
+              <input type="text" name="address" value={formData.adress} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2" />
             </div>
 
             <div>

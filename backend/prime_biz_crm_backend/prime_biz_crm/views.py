@@ -101,7 +101,9 @@ def get_user_info(request):
         
         user_data = {
             "username": user.username,
-            "email": user.email
+            "email": user.email,
+            "address": user.address,
+            "phone": user.phone,
         }
 
         return Response({"user": user_data})
@@ -195,6 +197,7 @@ def add_new_lead(request):
             contact_person_name=data.get("contact_person_name"),
             contact_person_surname=data.get("contact_person_surname"),
             email=email,
+            address=data.get("address"),
             phone=phone,
             website=website,
             industry=data.get("industry"),
@@ -221,6 +224,7 @@ def get_lead_by_id(request, lead_id):
             "contact_person_name": lead.contact_person_name,
             "contact_person_surname": lead.contact_person_surname,
             "email": lead.email,
+            "address": lead.address,
             "phone": lead.phone,
             "website": lead.website,
             "industry": lead.industry,
@@ -272,6 +276,7 @@ def update_lead(request, lead_id):
         lead.contact_person_name = data.get("contact_person_name", lead.contact_person_name) or lead.contact_person_name
         lead.contact_person_surname = data.get("contact_person_surname", lead.contact_person_surname) or lead.contact_person_surname
         lead.email = email
+        lead.address=data.get("address", lead.address) or lead.address
         lead.phone = phone
         lead.website = website
         lead.industry = data.get("industry", lead.industry) or lead.industry
@@ -394,6 +399,7 @@ def pipeline_detail(request, pipeline_id):
                 "contact_person_name": lead.contact_person_name if lead else "",
                 "contact_person_surname": lead.contact_person_surname if lead else "",
                 "email": lead.email if lead else "",
+                "address": lead.address if lead else "",
                 "phone": lead.phone if lead else "",
                 "website": lead.website if lead else "",
                 "industry": lead.industry if lead else "",
