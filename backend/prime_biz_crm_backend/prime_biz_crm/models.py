@@ -19,10 +19,12 @@ class CustomUserManager(BaseUserManager):
         return user
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
-    default_address = "Prime Biz CRM Ltd, Unit 15, Tech Park Business Centre, 42 Innovation Street, London, EC1A 4J, PUnited Kingdom"
+    default_company_name = "Prime Biz CRM Ind."
+    default_address = "Prime Biz CRM Ltd, Unit 15, Tech Park Business Centre, 42 Innovation Street, London, EC1A 4JP, United Kingdom"
     default_phone = "+442079460123"
 
     username = models.CharField(max_length=50, unique=True)
+    company_name = models.CharField(max_length=255, default=default_company_name)
     email = models.EmailField(unique=True)
     address = models.TextField(default=default_address)
     phone = models.CharField(max_length=20, default=default_phone)

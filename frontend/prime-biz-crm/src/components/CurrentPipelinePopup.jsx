@@ -63,8 +63,8 @@ const CurrentPipelinePopup = ({ isOpen, selectedDeal, onClose, onDealUpdated }) 
     };
 
     const handleGenerateInvoice = () => {
-        console.log(`Generating invoice for deal ${selectedDeal.id}...`);
-        //onClose();
+        onClose();
+        navigate(`/invoices/${selectedDeal.id}`, { state: { deal: selectedDeal } });
     };
 
     const handleMarkAsWinAndDelete = async () => {

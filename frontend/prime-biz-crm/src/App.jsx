@@ -99,7 +99,7 @@ function App() {
             }
           />
           <Route
-            path="/invoices"
+            path="/invoices/:pipeline_id"
             element={
               <MainLayout setToken={setToken} setIsAuthenticated={setIsAuthenticated}>
                 <ProtectedRoute element={<InvoicesPage />} isAuthenticated={isAuthenticated} />

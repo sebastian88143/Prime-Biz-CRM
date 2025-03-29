@@ -101,6 +101,7 @@ def get_user_info(request):
         
         user_data = {
             "username": user.username,
+            "company_name": user.company_name,
             "email": user.email,
             "address": user.address,
             "phone": user.phone,

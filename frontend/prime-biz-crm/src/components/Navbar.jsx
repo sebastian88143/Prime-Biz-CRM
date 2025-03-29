@@ -24,7 +24,6 @@ const Navbar = ({ setToken, setIsAuthenticated }) => {
         <Link to="/all_leads" className="secondary-link">All Leads</Link>
         <Link to="/analytics" className="secondary-link">Analytics</Link>
         <Link to="/reminders" className="secondary-link">Reminders</Link>
-        <Link to="/invoices" className="secondary-link">Invoices</Link>
       </div>
       <button className="logout-button" onClick={handleLogout}>Logout</button>
     </nav>
