@@ -528,3 +528,54 @@ def get_leads_per_day_chart(request):
 
     except Exception as e:
         return Response({"error": str(e)}, status=400)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+@authentication_classes([JWTAuthentication])
+def get_leads_per_industry_chart(request):
+    try:
+        industry_counts = (
+            Lead.objects.values("industry")
+            .annotate(count=Count("industry"))
+            .order_by("-count")
+        )
+
+        labels = [item["industry"] for item in industry_counts]
+        values = [item["count"] for item in industry_counts]
+
+        fig = go.Figure(data=[go.Pie(labels=labels, values=values, hole=0.4)])
+
+        fig.update_layout(
+            title="Lead Distribution By Industry",
+        )
+
+        chart_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+        return Response({"chart": chart_json}, status=200)
+
+    except Exception as e:
+        return Response({"error": str(e)}, status=400)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+@authentication_classes([JWTAuthentication])
+def get_leads_per_pipeline_chart(request):
+    try:
+        pipeline_data = (
+            Pipeline.objects.values('status')
+            .annotate(count=Count('id'))
+            .order_by('status')
+        )
+
+        labels = [item['status'] for item in pipeline_data]
+        values = [item['count'] for item in pipeline_data]
+
+        fig = go.Figure(data=[go.Pie(labels=labels, values=values, hole=0.4)])
+
+        fig.update_layout(title="Pipeline Status Distribution")
+
+        chart_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+        return Response({"chart": chart_json}, status=200)
+
+    except Exception as e:
+        return Response({"error": str(e)}, status=400)
