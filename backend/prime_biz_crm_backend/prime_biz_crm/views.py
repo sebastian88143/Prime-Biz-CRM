@@ -3,6 +3,7 @@ from.models import Lead, Pipeline, Reminder
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email, RegexValidator, URLValidator
+from django.db.models import Count
 from django.utils import timezone
 
 from rest_framework import status
@@ -12,7 +13,11 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from datetime import timedelta
 from decimal import Decimal
+import json
+import plotly.graph_objs as go
+import plotly.utils
 import re
 
 SECRET_KEY = "my_secret"
@@ -487,3 +492,39 @@ def mark_pipeline_as_won(request, pipeline_id):
         return Response({"message": "Pipeline marked as won."}, status=status.HTTP_200_OK)
     except Pipeline.DoesNotExist:
         return Response({"error": "Pipeline not found."}, status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+@authentication_classes([JWTAuthentication])
+def get_leads_per_day_chart(request):
+    try:
+        today = timezone.now().date()
+        days = [today - timedelta(days=i) for i in range(10)]
+
+        leads_per_day = Lead.objects.filter(
+            created_at__date__in=days
+        ).values('created_at__date').annotate(lead_count=Count('id')).order_by('created_at__date')
+
+        x_data = [str(day['created_at__date']) for day in leads_per_day]
+        y_data = [day['lead_count'] for day in leads_per_day]
+
+        for day in days:
+            if str(day) not in x_data:
+                x_data.append(str(day))
+                y_data.append(0)
+
+        fig = go.Figure(data=[go.Bar(x=x_data, y=y_data)])
+
+        fig.update_layout(
+            title="Leads Added in Last 10 Days",
+            xaxis_title="Date",
+            yaxis_title="Number of Leads",
+            xaxis_tickformat="%d-%m-%Y"
+        )
+
+        chart_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+        return Response({"chart": chart_json}, status=200)
+
+    except Exception as e:
+        return Response({"error": str(e)}, status=400)

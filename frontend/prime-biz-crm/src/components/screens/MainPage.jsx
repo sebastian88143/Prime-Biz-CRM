@@ -1,7 +1,8 @@
 import CurrentLeadPopup from "../CurrentLeadPopup";
 
-import React, { useState, useEffect } from "react";
 import axios from "axios";
+import React, { useState, useEffect } from "react";
+import Plot from 'react-plotly.js';
 
 const formatDate = (dateString) => {
   return new Intl.DateTimeFormat("en-GB", {
@@ -35,8 +36,8 @@ const MainPage = () => {
   const [leads, setLeads] = useState([]);
   const [reminders, setReminders] = useState([]);
   const [user, setUser] = useState(null);
+  const [chartData, setChartData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const token = localStorage.getItem("token");
 
   const [selectedLead, setSelectedLead] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -62,9 +63,16 @@ const MainPage = () => {
           headers: { Authorization: `Bearer ${token}` },
         }),
       ]);
-
       setLeads(leadsRes.data.leads);
       setReminders(remindersRes.data.reminders);
+
+      const chartRes = await axios.get("http://localhost:8000/api/leads_per_day_chart/", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setUser(userRes.data.user);;
+      const chartData = chartRes.data.chart;
+      setChartData(JSON.parse(chartData));
+
       setLoading(false);
     } catch (error) {
       console.error("❌ Error fetching data:", error);
@@ -90,15 +98,50 @@ const MainPage = () => {
       </div>
 
       <div className="flex gap-6 p-6">
-        {/* Sales Performance Section */}
-        <div className="bg-white p-6 rounded-lg shadow-lg w-2/3">
-          <h2 className="text-lg font-semibold mb-4">Sales Performance</h2>
-          <div className="bg-white rounded-lg h-72 flex items-center justify-center">
-            <p className="text-gray-400">[Chart Placeholder]</p>
+        <div className="bg-white p-6 rounded-lg shadow-lg w-2/3 h-full">
+          <h2 className="text-lg font-semibold mb-4">Leads Added Per Day</h2>
+          <div className="bg-white rounded-lg flex items-center justify-center w-full h-full">
+            {loading ? (
+              <p className="text-gray-400">Loading...</p>
+            ) : (
+              chartData && (
+                <Plot
+                  data={chartData.data.map(trace => ({
+                    ...trace,
+                    text: trace.y,
+                    textposition: 'auto',
+                  }))}
+                  layout={{
+                    ...chartData.layout,
+                    width: "100%",
+                    height: "100%",
+                    margin: {
+                      l: 5,
+                      r: 5,
+                      b: 5,
+                      t: 5,
+                      pad: 10,
+                    },
+                    title: "Leads per Day",
+                    xaxis: {
+                      title: "Date",
+                      tickangle: 45,
+                      tickmode: 'array',
+                      tickvals: chartData.data[0].x,
+                      ticktext: chartData.data[0].x,
+                    },
+                    yaxis: {
+                      title: "Leads Count",
+                      showgrid: true,
+                    },
+                  }}
+                  config={{ responsive: true }}
+                />
+              )
+            )}
           </div>
         </div>
 
-        {/* Top Leads Section */}
         <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
           <h2 className="text-lg font-semibold mb-4">Top Leads</h2>
           {loading ? (
@@ -121,7 +164,6 @@ const MainPage = () => {
       </div>
 
       <div className="flex gap-6 p-6">
-        {/* Reminders Section */}
         <div className="bg-white p-6 rounded-lg shadow-lg w-2/3">
           <h2 className="text-lg font-semibold mb-4">Reminders</h2>
           {loading ? (
@@ -147,7 +189,6 @@ const MainPage = () => {
           )}
         </div>
 
-        {/* Empty Space to Create Gap */}
         <div className="flex-grow w-1/3"></div>
 
         <CurrentLeadPopup isOpen={isModalOpen} selectedLead={selectedLead} onClose={closeModal} onLeadDeleted={fetchData} />

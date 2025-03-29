@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.core.validators import RegexValidator
+from django.utils import timezone
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, username, email, password=None):
@@ -79,7 +80,7 @@ class Lead(models.Model):
     notes = models.TextField(null=True, blank=True)
     converted_to_pipeline = models.BooleanField(default=False)
     created_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(default=timezone.now)
 
     class Meta:
         db_table = "Lead"
