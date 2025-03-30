@@ -126,7 +126,7 @@ class Reminder(models.Model):
     title = models.CharField(max_length=255, default='Title')
     description = models.TextField()
     reminder_date = models.DateTimeField()
-    created_at = models.DateTimeField()
+    created_at = models.DateTimeField(default=timezone.now)
 
     class Meta:
         db_table = "Reminder"

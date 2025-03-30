@@ -4,6 +4,7 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email, RegexValidator, URLValidator
 from django.db.models import Count
+from django.shortcuts import get_object_or_404
 from django.utils import timezone
 
 from rest_framework import status
@@ -13,7 +14,7 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from datetime import timedelta
+from datetime import datetime, timedelta
 from decimal import Decimal
 import json
 import plotly.graph_objs as go
@@ -579,3 +580,80 @@ def get_leads_per_pipeline_chart(request):
 
     except Exception as e:
         return Response({"error": str(e)}, status=400)
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+@authentication_classes([JWTAuthentication])
+def get_all_reminders(request):
+    try:
+        reminders = Reminder.objects.filter(user=request.user).order_by("-reminder_date")
+        reminder_data = list(
+            reminders.values("id", "title", "description", "reminder_date", "created_at")
+        )
+        return Response({"reminders": reminder_data}, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+@authentication_classes([JWTAuthentication])
+def add_reminder(request):
+    try:
+        data = request.data
+        title = data.get("title", "").strip()
+        description = data.get("description", "").strip()
+        reminder_date = data.get("reminder_date")
+
+        if not title:
+            return Response({"error_fields": {"title": "Title is required"}}, status=400)
+
+        if not reminder_date:
+            return Response({"error_fields": {"reminder_date": "Reminder date is required"}}, status=400)
+
+        try:
+            reminder_date = datetime.strptime(reminder_date, "%Y-%m-%d %H:%M:%S")
+        except ValueError:
+            return Response({"error_fields": {"reminder_date": "Invalid date format"}}, status=400)
+
+        reminder = Reminder.objects.create(
+            user=request.user,
+            title=title,
+            description=description,
+            reminder_date=reminder_date,
+        )
+
+        return Response(
+            {"message": "Reminder added successfully!", "reminder_id": reminder.id},
+            status=status.HTTP_201_CREATED,
+        )
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(["PUT"])
+@permission_classes([IsAuthenticated])
+@authentication_classes([JWTAuthentication])
+def update_reminder(request, reminder_id):
+    try:
+        reminder = get_object_or_404(Reminder, id=reminder_id, user=request.user)
+        data = request.data
+
+        reminder.title = data.get("title", reminder.title).strip()
+        reminder.description = data.get("description", reminder.description).strip()
+        reminder.reminder_date = data.get("reminder_date", reminder.reminder_date)
+
+        reminder.save()
+
+        return Response({"message": "Reminder updated successfully!"}, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(["DELETE"])
+@permission_classes([IsAuthenticated])
+@authentication_classes([JWTAuthentication])
+def delete_reminder(request, reminder_id):
+    try:
+        reminder = get_object_or_404(Reminder, id=reminder_id, user=request.user)
+        reminder.delete()
+        return Response({"message": "Reminder deleted successfully!"}, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)

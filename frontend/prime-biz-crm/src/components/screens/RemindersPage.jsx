@@ -1,114 +1,124 @@
+import useReminders from "../../hooks/UseReminders";
+import CustomCalendar from "../../components/Calendar";
+
+import { format } from "date-fns";
 import { useState } from "react";
-import { format, startOfMonth, endOfMonth, eachDayOfInterval, getDay, addMonths, subMonths, setMonth, setYear, isSameDay } from "date-fns";
 
 const RemindersPage = () => {
-  const [currentDate, setCurrentDate] = useState(new Date());
-  const [isEditingDate, setIsEditingDate] = useState(false);
+  const { reminders, addReminder, updateReminder, deleteReminder } = useReminders();
+  const [selectedReminder, setSelectedReminder] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [newReminder, setNewReminder] = useState({ title: "", description: "", reminder_date: "" });
 
-  const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-  const firstDayOfMonth = startOfMonth(currentDate);
-  const lastDayOfMonth = endOfMonth(currentDate);
-  const daysInMonth = eachDayOfInterval({ start: firstDayOfMonth, end: lastDayOfMonth });
+  const events = reminders.map((reminder) => ({
+    id: reminder.id,
+    title: reminder.title,
+    start: new Date(reminder.reminder_date),
+    end: new Date(reminder.reminder_date),
+  }));
 
-  // Lista przypomnień
-  const reminders = [
-    { date: new Date(2025, 1, 2), text: "Giveaway", color: "text-yellow-600" },
-    { date: new Date(2025, 1, 5), text: "Blog", color: "text-gray-600" },
-    { date: new Date(2025, 1, 5), text: "Freebie", color: "text-green-600" },
-    { date: new Date(2025, 1, 7), text: "Reel", color: "text-red-600" },
-    { date: new Date(2025, 1, 9), text: "Giveaway", color: "text-yellow-600" },
-    { date: new Date(2025, 1, 14), text: "Reel", color: "text-red-600" },
-    { date: new Date(2025, 1, 16), text: "Giveaway", color: "text-yellow-600" },
-    { date: new Date(2025, 1, 19), text: "Blog", color: "text-gray-600" },
-    { date: new Date(2025, 1, 21), text: "Reel", color: "text-red-600" },
-    { date: new Date(2025, 1, 26), text: "Quotes", color: "text-blue-600" },
-    { date: new Date(2025, 1, 26), text: "Blog", color: "text-gray-600" },
-    { date: new Date(2025, 1, 26), text: "Freebie", color: "text-green-600" },
-  ];
+  const handleEventClick = (event) => {
+    const fullReminder = reminders.find((r) => r.id === event.id);
+    setSelectedReminder(fullReminder);
 
-  const months = Array.from({ length: 12 }, (_, i) => format(new Date(2022, i, 1), "MMMM"));
-  const years = Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - 5 + i);
-
-  const handlePrevMonth = () => setCurrentDate(subMonths(currentDate, 1));
-  const handleNextMonth = () => setCurrentDate(addMonths(currentDate, 1));
-
-  const handleMonthChange = (event) => {
-    setCurrentDate(setMonth(currentDate, parseInt(event.target.value)));
-    setIsEditingDate(false);
+    const formattedDate = new Date(fullReminder.reminder_date).toISOString().slice(0, 16);
+    setSelectedReminder({
+      ...fullReminder,
+      reminder_date: formattedDate,
+    });
+    setShowModal(true);
   };
 
-  const handleYearChange = (event) => {
-    setCurrentDate(setYear(currentDate, parseInt(event.target.value)));
-    setIsEditingDate(false);
+  const handleAddReminder = async () => {
+    if (!newReminder.title || !newReminder.description || !newReminder.reminder_date) return;
+    await addReminder(newReminder);
+    setNewReminder({ title: "", description: "", reminder_date: "" });
+  };
+
+  const handleUpdateReminder = async () => {
+    if (!selectedReminder.title || !selectedReminder.description || !selectedReminder.reminder_date) return;
+    await updateReminder(selectedReminder.id, selectedReminder);
+    setShowModal(false);
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100 pt-24 px-4 pb-4">
-      <div className="w-full max-w-8xl bg-white shadow-lg rounded-lg p-6">
-        {/* Nagłówek Reminders */}
-        <h1 className="text-2xl font-bold text-gray-700 mb-4">Reminders</h1>
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4 pt-24">Reminders</h1>
+      <CustomCalendar events={events} onSelectEvent={handleEventClick} />
 
-        {/* Nagłówek Kalendarza */}
-        <div className="flex justify-between items-center mb-4">
-          <button onClick={handlePrevMonth} className="px-4 py-2 bg-blue-200 rounded-lg">←</button>
-
-          {/* Wybór miesiąca i roku */}
-          <div className="relative">
-            {isEditingDate ? (
-              <div className="flex space-x-2">
-                <select value={format(currentDate, "M") - 1} onChange={handleMonthChange} className="border p-1 rounded">
-                  {months.map((month, index) => (
-                    <option key={index} value={index}>{month}</option>
-                  ))}
-                </select>
-
-                <select value={format(currentDate, "yyyy")} onChange={handleYearChange} className="border p-1 rounded">
-                  {years.map((year) => (
-                    <option key={year} value={year}>{year}</option>
-                  ))}
-                </select>
-              </div>
-            ) : (
-              <h2 className="text-xl font-bold cursor-pointer" onClick={() => setIsEditingDate(true)}>
-                {format(currentDate, "MMMM yyyy")}
-              </h2>
-            )}
-          </div>
-
-          <button onClick={handleNextMonth} className="px-4 py-2 bg-blue-200 rounded-lg">→</button>
-        </div>
-
-        {/* Dni tygodnia */}
-        <div className="grid grid-cols-7 text-center font-bold border-b pb-2">
-          {daysOfWeek.map((day) => (
-            <div key={day} className="uppercase text-gray-600">{day}</div>
-          ))}
-        </div>
-
-        {/* Siatka dni */}
-        <div className="grid grid-cols-7 gap-1 bg-green-50">
-          {/* Puste pola przed pierwszym dniem miesiąca */}
-          {Array(getDay(firstDayOfMonth) === 0 ? 6 : getDay(firstDayOfMonth) - 1).fill(null).map((_, index) => (
-            <div key={index} className="border h-24"></div>
-          ))}
-
-          {/* Faktyczne dni miesiąca */}
-          {daysInMonth.map((day) => {
-            const dayReminders = reminders.filter((reminder) => isSameDay(reminder.date, day));
-
-            return (
-              <div key={day} className="border h-24 p-2 relative">
-                <span className="text-sm">{format(day, "d")}</span>
-                <div className="absolute bottom-2 left-2 text-xs space-y-1">
-                  {dayReminders.map((reminder, index) => (
-                    <div key={index} className={`${reminder.color} font-medium`}>{reminder.text}</div>
-                  ))}
-                </div>
-              </div>
-            );
-          })}
-        </div>
+      <div className="mt-4">
+        <input
+          type="text"
+          placeholder="Title"
+          value={newReminder.title}
+          onChange={(e) => setNewReminder({ ...newReminder, title: e.target.value })}
+          className="border p-2"
+        />
+        <textarea
+          placeholder="Description"
+          value={newReminder.description}
+          onChange={(e) => setNewReminder({ ...newReminder, description: e.target.value })}
+          className="border p-2 w-full mt-2"
+          rows="4"
+        />
+        <input
+          type="datetime-local"
+          value={newReminder.reminder_date}
+          onChange={(e) => setNewReminder({ ...newReminder, reminder_date: e.target.value })}
+          className="border p-2"
+        />
+        <button onClick={handleAddReminder} className="bg-green-500 text-white px-4 py-2 ml-2">
+          Add Reminder
+        </button>
       </div>
+
+      {showModal && selectedReminder && (
+        <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center backdrop-blur-xs z-50">
+          <div className="bg-white p-6 rounded shadow-lg max-w-sm w-full z-60">
+            <h2 className="text-lg font-bold">{selectedReminder.title}</h2>
+            <p className="text-sm">{format(new Date(selectedReminder.reminder_date), "PPPP")}</p>
+
+            <input
+              type="text"
+              value={selectedReminder.title}
+              onChange={(e) => setSelectedReminder({ ...selectedReminder, title: e.target.value })}
+              className="border p-2 w-full mt-2"
+            />
+            <textarea
+              value={selectedReminder.description}
+              onChange={(e) => setSelectedReminder({ ...selectedReminder, description: e.target.value })}
+              className="border p-2 w-full mt-2"
+              rows="4"
+            />
+            <input
+              type="datetime-local"
+              value={selectedReminder.reminder_date}
+              onChange={(e) => setSelectedReminder({ ...selectedReminder, reminder_date: e.target.value })}
+              className="border p-2 w-full mt-2"
+            />
+            <button
+              onClick={handleUpdateReminder}
+              className="bg-blue-500 text-white px-4 py-2 mt-2"
+            >
+              Save Changes
+            </button>
+
+            <button
+              onClick={async () => {
+                await deleteReminder(selectedReminder.id);
+                setShowModal(false);
+              }}
+              className="bg-red-500 text-white px-4 py-2 mt-2 ml-2"
+            >
+              Delete
+            </button>
+
+            <button onClick={() => setShowModal(false)} className="ml-2 bg-gray-500 text-white px-4 py-2">
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

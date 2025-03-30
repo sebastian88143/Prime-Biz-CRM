@@ -2,6 +2,7 @@ import CurrentLeadPopup from "../CurrentLeadPopup";
 
 import axios from "axios";
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Plot from 'react-plotly.js';
 
 const formatDate = (dateString) => {
@@ -41,6 +42,8 @@ const MainPage = () => {
 
   const [selectedLead, setSelectedLead] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchData();
@@ -83,6 +86,10 @@ const MainPage = () => {
   const handleCardClick = (lead) => {
     setSelectedLead(lead);
     setIsModalOpen(true);
+  };
+
+  const handleReminderClick = () => {
+    navigate("/reminders");
   };
 
   const closeModal = () => {
@@ -173,7 +180,7 @@ const MainPage = () => {
               {reminders.map((reminder) => (
                 <li
                   key={reminder.id}
-                  onClick={() => handleClick(reminder.title)}
+                  onClick={handleReminderClick}
                   className="cursor-pointer transition-all duration-300 ease-in-out hover:bg-blue-50 active:scale-95 p-4 rounded-lg shadow mb-2"
                 >
                   <div className="flex justify-between">
