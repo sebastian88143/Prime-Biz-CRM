@@ -1,6 +1,6 @@
 @echo off
 SET MYSQL_USER=root
-SET MYSQL_PASSWORD=root123!
+SET /P MYSQL_PASSWORD="Enter MySQL root password: "
 SET DB_NAME=prime_biz_crm_db
 SET DB_USER=django_user
 SET DB_PASSWORD=primebizcrm123!
@@ -13,7 +13,7 @@ echo CREATE USER IF NOT EXISTS '%DB_USER%'@'localhost' IDENTIFIED BY '%DB_PASSWO
 echo GRANT ALL PRIVILEGES ON %DB_NAME%.* TO '%DB_USER%'@'localhost'; >> temp.sql
 echo FLUSH PRIVILEGES; >> temp.sql
 
-REM Run MySQL and execute query from file
+REM Run MySQL and execute query from file, passing password directly
 mysql -u%MYSQL_USER% -p%MYSQL_PASSWORD% < temp.sql
 
 REM Delete temporary file
