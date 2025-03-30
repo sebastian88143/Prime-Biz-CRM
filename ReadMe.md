@@ -52,7 +52,7 @@ Clone the PrimeBizCRM repository to your local machine and go to the primebizcrm
 
 ```bash
 git clone https://github.com/yourusername/PrimeBizCRM.git
-cd PrimeBizCRM
+cd primebizcrm
 ```
 
 #### 2. Run the Setup Script
