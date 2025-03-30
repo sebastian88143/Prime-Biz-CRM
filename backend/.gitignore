@@ -1,0 +1,18 @@
+# Python virtual environment
+venv/
+
+# Django files
+*.log
+*.pot
+*.pyc
+__pycache__
+db.sqlite3
+media
+
+# Visual Studio Code files
+.vscode/* 
+!.vscode/settings.json 
+!.vscode/tasks.json 
+!.vscode/launch.json 
+!.vscode/extensions.json 
+.history
