@@ -48,12 +48,7 @@ Link to help installation: https://www.youtube.com/watch?v=u96rVINbAUI
 
 #### 1. Clone the repository
 
-Clone the PrimeBizCRM repository to your local machine and go to the primebizcrm directory:
-
-```bash
-git clone https://github.com/yourusername/PrimeBizCRM.git
-cd primebizcrm
-```
+Clone the PrimeBizCRM repository to your local machine and go to the primebizcrm directory.
 
 #### 2. Run the Setup Script
 The setup_project.bat script will automatically set up the frontend, backend, and database for you.
